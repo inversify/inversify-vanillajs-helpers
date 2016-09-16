@@ -1,0 +1,31 @@
+{
+  "name": "inversify-vanillajs-helpers",
+  "version": "1.0.0",
+  "description": "Some helper for the development of InversifyJS applications with VanillaJS",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "inversify": "^2.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inversify/inversify-vanillajs-helpers.git"
+  },
+  "keywords": [
+    "inversifyjs",
+    "vanillajs",
+    "helpers"
+  ],
+  "author": "Remo H. Jansen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inversify/inversify-vanillajs-helpers/issues"
+  },
+  "homepage": "https://github.com/inversify/inversify-vanillajs-helpers#readme"
+}
