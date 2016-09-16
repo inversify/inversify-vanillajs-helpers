@@ -1,7 +1,12 @@
 # inversify-vanillajs-helpers
 Some helper for the development of InversifyJS applications with VanillaJS
 
-# Annotation helper
+## Installation
+```
+// TODO
+```
+
+## Annotation helper
 Helps you to reduce annotation boilerplate when working with VanillaJS so instead of writting:
 
 ```js
@@ -69,7 +74,7 @@ var ninja = kernel.get(TYPES.Ninja);
 console.log(ninja.fight(), ninja.sneak());
 ```
 
-# Annotation and registration helper
+## Annotation and registration helper
 Helps you to reduce annotation and registration boilerplate when working with VanillaJS so instead of writting:
 
 ```js
