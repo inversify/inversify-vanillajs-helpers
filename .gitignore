@@ -25,6 +25,15 @@ coverage
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
+es
+lib
+dts
+
+src/*.js
+src/**/*.js
+src/*.js.map
+src/**/*.js.map
+src/*.d.ts
 
 # Dependency directories
 node_modules

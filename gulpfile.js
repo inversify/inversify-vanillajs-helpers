@@ -111,7 +111,7 @@ gulp.task("build-test", function() {
         .on("error", function(err) {
             process.exit(1);
         })
-        .js.pipe(gulp.dest("."));
+        .js.pipe(gulp.dest("test/"));
 });
 
 gulp.task("mocha", function() {
@@ -139,8 +139,7 @@ gulp.task("test", function(cb) {
 
 gulp.task("build", function(cb) {
     runSequence(
-        "lint", ["build-src", "build-es", "build-lib", "build-dts"], // tests + build es and lib
-        "build-test",
+        "lint", ["build-src", "build-test", "build-es", "build-lib", "build-dts"],
         cb);
 });
 

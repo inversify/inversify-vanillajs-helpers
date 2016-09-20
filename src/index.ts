@@ -1,3 +1,4 @@
+import annotate from "./annotate";
 import {
     register,
     registerSelf,
@@ -8,8 +9,7 @@ import {
     registerAutoFactory,
     registerFactory,
     registerProvider
-} from "./annotate";
-import annotate from "./annotate";
+} from "./register";
 
 export {
     annotate,

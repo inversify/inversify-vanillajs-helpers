@@ -1,4 +1,19 @@
 # inversify-vanillajs-helpers
+
+[![Join the chat at https://gitter.im/inversify/inversify-vanillajs-helpers](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/inversify/inversify-vanillajs-helpers?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://secure.travis-ci.org/inversify/inversify-vanillajs-helpers.svg?branch=master)](https://travis-ci.org/inversify/inversify-vanillajs-helpers)
+[![Test Coverage](https://codeclimate.com/github/inversify/inversify-vanillajs-helpers/badges/coverage.svg)](https://codeclimate.com/github/inversify/inversify-vanillajs-helpers/coverage)
+[![npm version](https://badge.fury.io/js/inversify-vanillajs-helpers.svg)](http://badge.fury.io/js/inversify-vanillajs-helpers)
+[![Dependencies](https://david-dm.org/inversify/inversify-vanillajs-helpers.svg)](https://david-dm.org/inversify/inversify-vanillajs-helpers#info=dependencies)
+[![img](https://david-dm.org/inversify/inversify-vanillajs-helpers/dev-status.svg)](https://david-dm.org/inversify/inversify-vanillajs-helpers/#info=devDependencies)
+[![img](https://david-dm.org/inversify/inversify-vanillajs-helpers/peer-status.svg)](https://david-dm.org/inversify/inversify-vanillajs-helpers/#info=peerDependenciess)
+[![Known Vulnerabilities](https://snyk.io/test/github/inversify/inversify-vanillajs-helpers/badge.svg)](https://snyk.io/test/github/inversify/inversify-vanillajs-helpers)
+
+[![NPM](https://nodei.co/npm/inversify-vanillajs-helpers.png?downloads=true&downloadRank=true)](https://nodei.co/npm/inversify-vanillajs-helpers/)
+[![NPM](https://nodei.co/npm-dl/inversify-vanillajs-helpers.png?months=9&height=3)](https://nodei.co/npm/inversify-vanillajs-helpers/)
+
+![](https://raw.githubusercontent.com/inversify/inversify.github.io/master/img/cover.jpg)
+
 Some helper for the development of InversifyJS applications with VanillaJS
 
 ## Installation
