@@ -18,7 +18,7 @@ Some helper for the development of InversifyJS applications with VanillaJS
 
 ## Installation
 ```
-// TODO
+$ npm install inversify-vanillajs-helpers
 ```
 
 ## Annotation helper
