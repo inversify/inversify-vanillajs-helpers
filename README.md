@@ -86,8 +86,31 @@ kernel.bind(TYPES.Shuriken).to(Shuriken);
 var ninja = kernel.get(TYPES.Ninja);
 console.log(ninja.fight(), ninja.sneak());
 ```
+## Named annotations
 
-## Annotation and registration helper
+```js
+helpers.annotate(
+    Ninja,
+    [
+        { type: TYPES.Katana, named: "not-throwable" },
+        { type: TYPES.Shuriken, named: "throwable" }
+    ]
+);
+```
+
+## Tagged annotations
+
+```js
+helpers.annotate(
+    Ninja,
+    [
+        { type: TYPES.Katana, tagged: { key: "throwable", val: false } },
+        { type: TYPES.Shuriken, tagged: { key: "throwable", val: true } }
+    ]
+);
+```
+
+## Registration helper
 Helps you to reduce annotation and registration boilerplate when working with VanillaJS so instead of writting:
 
 ```js
@@ -163,30 +186,61 @@ interface BindingToSyntax<T> {
   toProvider<T2>(provider: ProviderCreator<T2>): BindingWhenOnSyntax<T>;
 }
 ```
-We can use the helpers to register many types of bindings:
+We can use the helpers to register many types of bindings.
+
+### registerSelf
 
 ```js
 helpers.registerSelf(kernel, Katana);
-helpers.registerConstantValue(kernel, TYPES.Katana, new Katana());
+```
 
+### registerConstantValue
+
+```js
+helpers.registerConstantValue(kernel, TYPES.Katana, new Katana());
+```
+
+### registerDynamicValue
+
+```js
 helpers.registerDynamicValue(kernel, TYPES.Katana, (context) => {
   new Katana();
 });
+```
 
+### registerConstructor
+
+```js
 helpers.registerConstructor(kernel, TYPES.Katana, Katana);
+```
 
+### registerFunction
+
+```js
 helpers.registerFunction(kernel, TYPES.SomeFunction, () {
   console.log("I'm doing something...");
 });
+```
 
+### registerAutoFactory
+
+```js
 helpers.registerAutoFactory(kernel, TYPES.KatanaFactory, TYPES.Katana);
+```
 
+### registerFactory
+
+```js
 helpers.registerFactory(kernel, TYPES.KatanaFactory, (context: interfaces.Context) => {
   return () => {
     return context.kernel.get<Katana>("Katana");
   };
 });
+```
 
+### registerProvider
+
+```js
 helpers.registerProvider(kernel, TYPES.KatanaProvider, (context) => {
     return () => {
         return new Promise<Katana>((resolve) => {
@@ -196,6 +250,8 @@ helpers.registerProvider(kernel, TYPES.KatanaProvider, (context) => {
     };
 });
 ```
+
+## Declaring binding constraints
 
 The register helper allows access to the fluent binding declaration API:
 
