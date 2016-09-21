@@ -35,6 +35,12 @@ src/*.js.map
 src/**/*.js.map
 src/*.d.ts
 
+test/*.js
+test/**/*.js
+test/*.js.map
+test/**/*.js.map
+test/*.d.ts
+
 # Dependency directories
 node_modules
 jspm_packages
