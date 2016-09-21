@@ -12,8 +12,6 @@
 [![NPM](https://nodei.co/npm/inversify-vanillajs-helpers.png?downloads=true&downloadRank=true)](https://nodei.co/npm/inversify-vanillajs-helpers/)
 [![NPM](https://nodei.co/npm-dl/inversify-vanillajs-helpers.png?months=9&height=3)](https://nodei.co/npm/inversify-vanillajs-helpers/)
 
-![](https://raw.githubusercontent.com/inversify/inversify.github.io/master/img/cover.jpg)
-
 Some helper for the development of InversifyJS applications with VanillaJS
 
 ## Installation
