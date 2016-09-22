@@ -119,6 +119,7 @@ inversify.decorate(inversify.inject(TYPES.Katana), Ninja, 0);
 inversify.decorate(inversify.inject(TYPES.Shuriken), Ninja, 1);
 kernel.bind(TYPES.Ninja).to(Ninja);
 ```
+
 You can just write:
 
 ```js
@@ -126,6 +127,7 @@ helpers.register(kernel, TYPES.Ninja, Ninja, [TYPES.Katana, TYPES.Shuriken]);
 ```
 
 Let's take a look to an example:
+
 ```js
 var inversify = require("inversify");
 var helpers =  require("inversify-vanillajs-helpers");
@@ -162,10 +164,11 @@ class Ninja {
 }
 
 // Declare bindings
-var kernel = new inversify.Kernel()
-helpers.register(kernel, TYPES.Katana, Katana);
-helpers.register(kernel, TYPES.Shuriken, Shuriken);
-helpers.register(kernel, TYPES.Ninja, Ninja, [TYPES.Katana, TYPES.Shuriken]);
+var kernel = new inversify.Kernel();
+var register = helpers.register(kernel);
+register(TYPES.Katana, Katana);
+register(TYPES.Shuriken, Shuriken);
+register(TYPES.Ninja, Ninja, [TYPES.Katana, TYPES.Shuriken]);
 
 // Resolve dependencies
 var ninja = kernel.get(TYPES.Ninja);
@@ -173,6 +176,7 @@ console.log(ninja.fight(), ninja.sneak());
 ```
 
 Just like when we use the binding API:
+
 ```ts
 interface BindingToSyntax<T> {
   to(constructor: { new (...args: any[]): T; }): BindingInWhenOnSyntax<T>;
@@ -186,38 +190,42 @@ interface BindingToSyntax<T> {
   toProvider<T2>(provider: ProviderCreator<T2>): BindingWhenOnSyntax<T>;
 }
 ```
+
 We can use the helpers to register many types of bindings.
 
 ### registerSelf
 
 ```js
-helpers.registerSelf(kernel, Katana);
+var registerSelf = helpers.registerSelf(kernel);
+registerSelf(Katana); // Katana is a class
 ```
 
 ### registerConstantValue
 
 ```js
-helpers.registerConstantValue(kernel, TYPES.Katana, new Katana());
+var registerConstantValue = helpers.registerConstantValue(kernel);
+registerConstantValue(TYPES.Katana, new Katana());
 ```
 
 ### registerDynamicValue
 
 ```js
-helpers.registerDynamicValue(kernel, TYPES.Katana, (context) => {
-  new Katana();
-});
+var registerDynamicValue = helpers.registerDynamicValue(kernel);
+registerDynamicValue(TYPES.Katana, (context) => { new Katana(); });
 ```
 
 ### registerConstructor
 
 ```js
-helpers.registerConstructor(kernel, TYPES.Katana, Katana);
+var registerConstructor = helpers.registerConstructor(kernel);
+registerConstructor(TYPES.Katana, Katana);
 ```
 
 ### registerFunction
 
 ```js
-helpers.registerFunction(kernel, TYPES.SomeFunction, () {
+var registerFunction = helpers.registerFunction(kernel);
+registerFunction(TYPES.SomeFunction, () {
   console.log("I'm doing something...");
 });
 ```
@@ -225,15 +233,17 @@ helpers.registerFunction(kernel, TYPES.SomeFunction, () {
 ### registerAutoFactory
 
 ```js
-helpers.registerAutoFactory(kernel, TYPES.KatanaFactory, TYPES.Katana);
+var registerAutoFactory = helpers.registerAutoFactory(kernel);
+registerAutoFactory(TYPES.KatanaFactory, TYPES.Katana);
 ```
 
 ### registerFactory
 
 ```js
-helpers.registerFactory(kernel, TYPES.KatanaFactory, (context: interfaces.Context) => {
+var registerFactory = helpers.registerFactory(kernel);
+registerFactory(TYPES.KatanaFactory, (context) => {
   return () => {
-    return context.kernel.get<Katana>("Katana");
+    return context.kernel.get("Katana");
   };
 });
 ```
@@ -241,10 +251,11 @@ helpers.registerFactory(kernel, TYPES.KatanaFactory, (context: interfaces.Contex
 ### registerProvider
 
 ```js
-helpers.registerProvider(kernel, TYPES.KatanaProvider, (context) => {
+var registerProvider = helpers.registerProvider(kernel);
+registerProvider(TYPES.KatanaProvider, (context) => {
     return () => {
         return new Promise<Katana>((resolve) => {
-            let katana = context.kernel.get<Katana>("Katana");
+            let katana = context.kernel.get("Katana");
             resolve(katana);
         });
     };
@@ -256,6 +267,7 @@ helpers.registerProvider(kernel, TYPES.KatanaProvider, (context) => {
 The register helper allows access to the fluent binding declaration API:
 
 ```js
-helpers.registerClass(kernel, TYPES.Weapon, new Katana()).whenTargetTagged("throwable", false);
-helpers.registerClass(kernel, TYPES.Weapon, new Shuriken()).whenTargetTagged("throwable", true);
+var registerClass = helpers.registerClass(kernel);
+registerClass(TYPES.Weapon, Katana).whenTargetTagged("throwable", false);
+registerClass(TYPES.Weapon, Shuriken).whenTargetTagged("throwable", true);
 ```
