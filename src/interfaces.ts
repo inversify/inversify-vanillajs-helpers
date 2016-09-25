@@ -9,7 +9,7 @@ export interface NamedInjection extends BasicInjection {
 }
 
 export interface TaggedInjection extends BasicInjection {
-    tagged: { key: string, val: string };
+    tagged: { key: string, value: string };
 }
 
 export type Injection = (

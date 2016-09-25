@@ -246,8 +246,8 @@ describe("Annotate Helper", () => {
         helpers.annotate(
             Ninja,
             [
-                { tagged: { key: "throwable", val: false }, type: "Weapon" },
-                { tagged: { key: "throwable", val: true }, type: "Weapon" }
+                { tagged: { key: "throwable", value: false }, type: "Weapon" },
+                { tagged: { key: "throwable", value: true }, type: "Weapon" }
             ]
         );
         kernel.bind<Katana>("Weapon").to(Katana).whenTargetTagged("throwable", false);

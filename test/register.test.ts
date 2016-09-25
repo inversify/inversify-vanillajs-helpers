@@ -535,7 +535,7 @@ describe("Register Helper", () => {
             ]
         );
 
-        let ninja = kernel.get<Ninja>("Weapon");
+        let ninja = kernel.get<Ninja>("Warrior");
         expect(ninja.primaryWeapon.name).to.eql("Katana");
         expect(ninja.secondaryWeapon.name).to.eql("Shuriken");
 
@@ -577,18 +577,26 @@ describe("Register Helper", () => {
 
         let kernel = new Kernel();
         let register = helpers.register(kernel);
-        register<Weapon>("Weapon", Katana).whenTargetTagged("throwable", false);
-        register<Weapon>("Weapon", Shuriken).whenTargetTagged("throwable", true);
+        let TYPE = {
+            Warrior: "Warrior",
+            Weapon: "Weapon"
+        };
+        register<Weapon>(TYPE.Weapon, Katana).whenTargetTagged("throwable", false);
+        register<Weapon>(TYPE.Weapon, Shuriken).whenTargetTagged("throwable", true);
+
+        let katana = kernel.getTagged<Ninja>(TYPE.Weapon, "throwable", false);
+        console.log(katana);
+
         register<Warrior>(
-            "Warrior",
+            TYPE.Warrior,
             Ninja,
             [
-                { tagged: { key: "throwable", value: false }, type: "Weapon" },
-                { tagged: { key: "throwable", value: true }, type: "Weapon" }
+                { tagged: { key: "throwable", value: false }, type: TYPE.Weapon },
+                { tagged: { key: "throwable", value: true }, type: TYPE.Weapon }
             ]
         );
 
-        let ninja = kernel.get<Ninja>("Weapon");
+        let ninja = kernel.get<Ninja>(TYPE.Warrior);
         expect(ninja.primaryWeapon.name).to.eql("Katana");
         expect(ninja.secondaryWeapon.name).to.eql("Shuriken");
 

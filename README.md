@@ -19,6 +19,14 @@ Some helper for the development of InversifyJS applications with VanillaJS
 $ npm install inversify-vanillajs-helpers
 ```
 
+## Usage
+```js
+import { helpers } from "inversify-vanillajs-helpers";
+```
+```js
+var helpers = require("inversify-vanillajs-helpers");
+```
+
 ## Annotation helper
 Helps you to reduce annotation boilerplate when working with VanillaJS so instead of writting:
 
@@ -27,6 +35,7 @@ inversify.decorate(inversify.injectable(), Ninja);
 inversify.decorate(inversify.inject(TYPES.Katana), Ninja, 0);
 inversify.decorate(inversify.inject(TYPES.Shuriken), Ninja, 1);
 ```
+
 You can just write:
 
 ```js
@@ -37,7 +46,7 @@ Let's take a look to an example:
 
 ```js
 var inversify = require("inversify");
-var helpers =  require("inversify-vanillajs-helpers");
+var helpers = require("inversify-vanillajs-helpers");
 require("reflect-metadata");
 
 var TYPES = {
@@ -86,7 +95,9 @@ kernel.bind(TYPES.Shuriken).to(Shuriken);
 var ninja = kernel.get(TYPES.Ninja);
 console.log(ninja.fight(), ninja.sneak());
 ```
+
 ## Named annotations
+It is also possible to declare named metadata using the annotation helper:
 
 ```js
 helpers.annotate(
@@ -99,13 +110,14 @@ helpers.annotate(
 ```
 
 ## Tagged annotations
+It is also possible to declare tagged metadata using the annotation helper:
 
 ```js
 helpers.annotate(
     Ninja,
     [
-        { type: TYPES.Katana, tagged: { key: "throwable", val: false } },
-        { type: TYPES.Shuriken, tagged: { key: "throwable", val: true } }
+        { type: TYPES.Katana, tagged: { key: "throwable", value: false } },
+        { type: TYPES.Shuriken, tagged: { key: "throwable", value: true } }
     ]
 );
 ```

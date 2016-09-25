@@ -46,11 +46,10 @@ function annotate<T>(
 
             // Add tagged metadata
             if ((injection as helperInterfaces.TaggedInjection).tagged !== undefined) {
-
                 decorate(
                     tagged(
                         (injection as helperInterfaces.TaggedInjection).tagged.key,
-                        (injection as helperInterfaces.TaggedInjection).tagged.val
+                        (injection as helperInterfaces.TaggedInjection).tagged.value
                     ),
                     constructor,
                     index
