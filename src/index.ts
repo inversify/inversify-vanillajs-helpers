@@ -1,4 +1,6 @@
 import annotate from "./annotate";
+import * as interfaces from "./interfaces";
+import { interfaces as inversifyInterfaces } from "inversify";
 import {
     register,
     registerSelf,
@@ -11,7 +13,7 @@ import {
     registerProvider
 } from "./register";
 
-export {
+let helpers = {
     annotate,
     register,
     registerSelf,
@@ -22,4 +24,6 @@ export {
     registerAutoFactory,
     registerFactory,
     registerProvider
-}
+};
+
+export { interfaces, inversifyInterfaces, helpers };

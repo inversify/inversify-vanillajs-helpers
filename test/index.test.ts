@@ -1,19 +1,19 @@
 import { expect } from "chai";
-import * as inversifyVanillaJsHelpers from "../src/index";
+import { helpers } from "../src/index";
 
 describe("Entry Point", () => {
 
     it("Should export register and annotate helpers", () => {
-        expect(typeof inversifyVanillaJsHelpers.annotate).to.eql("function");
-        expect(typeof inversifyVanillaJsHelpers.register).to.eql("function");
-        expect(typeof inversifyVanillaJsHelpers.registerSelf).to.eql("function");
-        expect(typeof inversifyVanillaJsHelpers.registerConstructor).to.eql("function");
-        expect(typeof inversifyVanillaJsHelpers.registerConstantValue).to.eql("function");
-        expect(typeof inversifyVanillaJsHelpers.registerDynamicValue).to.eql("function");
-        expect(typeof inversifyVanillaJsHelpers.registerFunction).to.eql("function");
-        expect(typeof inversifyVanillaJsHelpers.registerAutoFactory).to.eql("function");
-        expect(typeof inversifyVanillaJsHelpers.registerFactory).to.eql("function");
-        expect(typeof inversifyVanillaJsHelpers.registerProvider).to.eql("function");
+        expect(typeof helpers.annotate).to.eql("function");
+        expect(typeof helpers.register).to.eql("function");
+        expect(typeof helpers.registerSelf).to.eql("function");
+        expect(typeof helpers.registerConstructor).to.eql("function");
+        expect(typeof helpers.registerConstantValue).to.eql("function");
+        expect(typeof helpers.registerDynamicValue).to.eql("function");
+        expect(typeof helpers.registerFunction).to.eql("function");
+        expect(typeof helpers.registerAutoFactory).to.eql("function");
+        expect(typeof helpers.registerFactory).to.eql("function");
+        expect(typeof helpers.registerProvider).to.eql("function");
     });
 
 });

@@ -1,13 +1,16 @@
-import { decorate, injectable, inject, named, tagged, interfaces } from "inversify";
-import { Injection, TaggedInjection, NamedInjection, BasicInjection } from "./interfaces";
+import { decorate, injectable, inject, tagged, named, interfaces } from "inversify";
+import * as helperInterfaces from "./interfaces";
 
-function annotate<T>(constructor: interfaces.Newable<T>, dependencies: Injection[] = []): void {
+function annotate<T>(
+    constructor: interfaces.Newable<T>,
+    dependencies: helperInterfaces.Injection[] = []
+): void {
 
     decorate(injectable(), constructor);
 
-    (dependencies).forEach((injection: Injection, index: number) => {
+    (dependencies).forEach((injection: helperInterfaces.Injection, index: number) => {
 
-        if ((injection as BasicInjection).type === undefined) {
+        if ((injection as helperInterfaces.BasicInjection).type === undefined) {
 
             // Add inject metadata
             decorate(
@@ -23,17 +26,18 @@ function annotate<T>(constructor: interfaces.Newable<T>, dependencies: Injection
             // Add inject metadata
             decorate(
                 inject(
-                    (injection as BasicInjection).type
+                    (injection as helperInterfaces.BasicInjection).type
                 ),
                 constructor,
                 index
             );
 
             // Add named metadata
-            if ((injection as NamedInjection).named !== undefined) {
+            if ((injection as helperInterfaces.NamedInjection).named !== undefined) {
+
                 decorate(
                     named(
-                        (injection as NamedInjection).named
+                        (injection as helperInterfaces.NamedInjection).named
                     ),
                     constructor,
                     index
@@ -41,11 +45,12 @@ function annotate<T>(constructor: interfaces.Newable<T>, dependencies: Injection
             }
 
             // Add tagged metadata
-            if ((injection as TaggedInjection).tagged !== undefined) {
+            if ((injection as helperInterfaces.TaggedInjection).tagged !== undefined) {
+
                 decorate(
                     tagged(
-                        (injection as TaggedInjection).tagged.key,
-                        (injection as TaggedInjection).tagged.val
+                        (injection as helperInterfaces.TaggedInjection).tagged.key,
+                        (injection as helperInterfaces.TaggedInjection).tagged.val
                     ),
                     constructor,
                     index

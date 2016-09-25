@@ -175,22 +175,6 @@ var ninja = kernel.get(TYPES.Ninja);
 console.log(ninja.fight(), ninja.sneak());
 ```
 
-Just like when we use the binding API:
-
-```ts
-interface BindingToSyntax<T> {
-  to(constructor: { new (...args: any[]): T; }): BindingInWhenOnSyntax<T>;
-  toSelf(): BindingInWhenOnSyntax<T>;
-  toConstantValue(value: T): BindingWhenOnSyntax<T>;
-  toDynamicValue(func: (context: Context) => T): BindingInWhenOnSyntax<T>;
-  toConstructor<T2>(constructor: Newable<T2>): BindingWhenOnSyntax<T>;
-  toFactory<T2>(factory: FactoryCreator<T2>): BindingWhenOnSyntax<T>;
-  toFunction(func: T): BindingWhenOnSyntax<T>;
-  toAutoFactory<T2>(serviceIdentifier: ServiceIdentifier<T2>): BindingWhenOnSyntax<T>;
-  toProvider<T2>(provider: ProviderCreator<T2>): BindingWhenOnSyntax<T>;
-}
-```
-
 We can use the helpers to register many types of bindings.
 
 ### registerSelf
@@ -267,7 +251,11 @@ registerProvider(TYPES.KatanaProvider, (context) => {
 The register helper allows access to the fluent binding declaration API:
 
 ```js
-var registerClass = helpers.registerClass(kernel);
-registerClass(TYPES.Weapon, Katana).whenTargetTagged("throwable", false);
-registerClass(TYPES.Weapon, Shuriken).whenTargetTagged("throwable", true);
+var register = helpers.register(kernel);
+register(TYPES.Weapon, Katana).whenTargetTagged("throwable", false);
+register(TYPES.Weapon, Shuriken).whenTargetTagged("throwable", true);
+register(TYPES.Ninja, Ninja, [
+  { tagged: { key: "throwable", value: false }, type: "Weapon" },
+  { tagged: { key: "throwable", value: true }, type: "Weapon" }
+]);
 ```

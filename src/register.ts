@@ -1,29 +1,30 @@
 import { interfaces } from "inversify";
+import * as helperInterfaces from "./interfaces";
 import annotate from "./annotate";
 
-function register<T>(kernel: interfaces.Kernel) {
-    return (
+function register(kernel: interfaces.Kernel) {
+    return <T>(
         identifier: interfaces.ServiceIdentifier<T>,
         constructor: interfaces.Newable<T>,
-        dependencies: interfaces.ServiceIdentifier<T>[] = []
+        dependencies: helperInterfaces.Injection[] = []
     ) => {
         annotate<T>(constructor, dependencies);
         return kernel.bind<T>(identifier).to(constructor);
     };
 }
 
-function registerSelf<T>(kernel: interfaces.Kernel) {
-    return (
+function registerSelf(kernel: interfaces.Kernel) {
+    return <T>(
         constructor: interfaces.Newable<T>,
-        dependencies?: interfaces.ServiceIdentifier<T>[]
+        dependencies: helperInterfaces.Injection[] = []
     ) => {
         annotate<T>(constructor, dependencies);
         return kernel.bind<T>(constructor).toSelf();
     };
 }
 
-function registerConstantValue<T>(kernel: interfaces.Kernel) {
-    return (
+function registerConstantValue(kernel: interfaces.Kernel) {
+    return <T>(
         identifier: interfaces.ServiceIdentifier<T>,
         value: T
     ) => {
@@ -31,8 +32,8 @@ function registerConstantValue<T>(kernel: interfaces.Kernel) {
     };
 }
 
-function registerDynamicValue<T>(kernel: interfaces.Kernel) {
-    return (
+function registerDynamicValue(kernel: interfaces.Kernel) {
+    return <T>(
         identifier: interfaces.ServiceIdentifier<T>,
         func: (context: interfaces.Context) => T
     ) => {
@@ -40,8 +41,8 @@ function registerDynamicValue<T>(kernel: interfaces.Kernel) {
     };
 }
 
-function registerConstructor<T>(kernel: interfaces.Kernel) {
-    return (
+function registerConstructor(kernel: interfaces.Kernel) {
+    return <T>(
         identifier: interfaces.ServiceIdentifier<T>,
         constructor: interfaces.Newable<T>
     ) => {
@@ -49,8 +50,8 @@ function registerConstructor<T>(kernel: interfaces.Kernel) {
     };
 }
 
-function registerFunction<T extends Function>(kernel: interfaces.Kernel) {
-    return (
+function registerFunction(kernel: interfaces.Kernel) {
+    return <T extends Function>(
         identifier: interfaces.ServiceIdentifier<T>,
         func: T
     ) => {
@@ -58,8 +59,8 @@ function registerFunction<T extends Function>(kernel: interfaces.Kernel) {
     };
 }
 
-function registerAutoFactory<T1, T2>(kernel: interfaces.Kernel) {
-    return (
+function registerAutoFactory(kernel: interfaces.Kernel) {
+    return <T1, T2>(
         factoryIdentifier: interfaces.ServiceIdentifier<T1>,
         serviceIdentifier: interfaces.ServiceIdentifier<T2>
     ) => {
@@ -67,8 +68,8 @@ function registerAutoFactory<T1, T2>(kernel: interfaces.Kernel) {
     };
 }
 
-function registerFactory<T1, T2>(kernel: interfaces.Kernel) {
-    return (
+function registerFactory(kernel: interfaces.Kernel) {
+    return <T1, T2>(
         identifier: interfaces.ServiceIdentifier<T1>,
         factory: interfaces.FactoryCreator<T2>
     ) => {
@@ -76,12 +77,13 @@ function registerFactory<T1, T2>(kernel: interfaces.Kernel) {
     };
 }
 
-function registerProvider<T1, T2>(
-    kernel: interfaces.Kernel,
-    identifier: interfaces.ServiceIdentifier<T1>,
-    provider: interfaces.ProviderCreator<T2>
-) {
-    return kernel.bind<T1>(identifier).toProvider<T2>(provider);
+function registerProvider(kernel: interfaces.Kernel) {
+    return <T1, T2>(
+        identifier: interfaces.ServiceIdentifier<T1>,
+        provider: interfaces.ProviderCreator<T2>
+    ) => {
+        return kernel.bind<T1>(identifier).toProvider<T2>(provider);
+    };
 }
 
 export {

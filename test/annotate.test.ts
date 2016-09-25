@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { Kernel } from "inversify";
-import * as inversifyVanillaJsHelpers from "../src/index";
+import { helpers } from "../src/index";
 
 describe("Annotate Helper", () => {
 
@@ -30,9 +30,9 @@ describe("Annotate Helper", () => {
         }
 
         let kernel = new Kernel();
-        inversifyVanillaJsHelpers.annotate(Katana);
-        inversifyVanillaJsHelpers.annotate(Shuriken);
-        inversifyVanillaJsHelpers.annotate(Ninja, [ "Katana", "Shuriken" ]);
+        helpers.annotate(Katana);
+        helpers.annotate(Shuriken);
+        helpers.annotate(Ninja, [ "Katana", "Shuriken" ]);
         kernel.bind<Katana>("Katana").to(Katana);
         kernel.bind<Shuriken>("Shuriken").to(Shuriken);
         kernel.bind<Ninja>("Ninja").to(Ninja);
@@ -73,9 +73,9 @@ describe("Annotate Helper", () => {
         let NinjaId = Symbol("Ninja");
 
         let kernel = new Kernel();
-        inversifyVanillaJsHelpers.annotate(Katana);
-        inversifyVanillaJsHelpers.annotate(Shuriken);
-        inversifyVanillaJsHelpers.annotate(Ninja, [NotTrowableWeaponId, ThrowableWeaponId]);
+        helpers.annotate(Katana);
+        helpers.annotate(Shuriken);
+        helpers.annotate(Ninja, [NotTrowableWeaponId, ThrowableWeaponId]);
         kernel.bind<Katana>(NotTrowableWeaponId).to(Katana);
         kernel.bind<Shuriken>(ThrowableWeaponId).to(Shuriken);
         kernel.bind<Ninja>(NinjaId).to(Ninja);
@@ -112,9 +112,9 @@ describe("Annotate Helper", () => {
         }
 
         let kernel = new Kernel();
-        inversifyVanillaJsHelpers.annotate(Katana);
-        inversifyVanillaJsHelpers.annotate(Shuriken);
-        inversifyVanillaJsHelpers.annotate(Ninja, [ Katana, Shuriken ]);
+        helpers.annotate(Katana);
+        helpers.annotate(Shuriken);
+        helpers.annotate(Ninja, [ Katana, Shuriken ]);
         kernel.bind<Katana>(Katana).toSelf();
         kernel.bind<Shuriken>(Shuriken).toSelf();
         kernel.bind<Ninja>(Ninja).to(Ninja);
@@ -151,9 +151,9 @@ describe("Annotate Helper", () => {
         }
 
         let kernel = new Kernel();
-        inversifyVanillaJsHelpers.annotate(Katana);
-        inversifyVanillaJsHelpers.annotate(Shuriken);
-        inversifyVanillaJsHelpers.annotate(
+        helpers.annotate(Katana);
+        helpers.annotate(Shuriken);
+        helpers.annotate(
             Ninja,
             [
                 { type: "Katana" },
@@ -196,9 +196,9 @@ describe("Annotate Helper", () => {
         }
 
         let kernel = new Kernel();
-        inversifyVanillaJsHelpers.annotate(Katana);
-        inversifyVanillaJsHelpers.annotate(Shuriken);
-        inversifyVanillaJsHelpers.annotate(
+        helpers.annotate(Katana);
+        helpers.annotate(Shuriken);
+        helpers.annotate(
             Ninja,
             [
                 { named: "not-throwable", type: "Weapon" },
@@ -241,9 +241,9 @@ describe("Annotate Helper", () => {
         }
 
         let kernel = new Kernel();
-        inversifyVanillaJsHelpers.annotate(Katana);
-        inversifyVanillaJsHelpers.annotate(Shuriken);
-        inversifyVanillaJsHelpers.annotate(
+        helpers.annotate(Katana);
+        helpers.annotate(Shuriken);
+        helpers.annotate(
             Ninja,
             [
                 { tagged: { key: "throwable", val: false }, type: "Weapon" },
