@@ -285,8 +285,13 @@ The register helper allows access to the fluent binding declaration API:
 ```js
 var register = helpers.register(kernel);
 
-register(TYPES.Weapon, (b) => { b.whenTargetTagged("throwable", false); })(Katana);
-register(TYPES.Weapon, (b) => { b.whenTargetTagged("throwable", true); })(Shuriken);
+register(TYPES.Weapon, (b) => {
+    b.whenTargetTagged("throwable", false);
+})(Katana);
+
+register(TYPES.Weapon, (b) => {
+    b.whenTargetTagged("throwable", true);
+})(Shuriken);
 
 register(TYPES.Ninja, [
   { tagged: { key: "throwable", value: false }, type: "Weapon" },
@@ -334,7 +339,7 @@ class Shuriken {
     ]
 )
 class Ninja {
-    constructor(primaryWeapon: Weapon, secondaryWeapon: Weapon) {
+    constructor(primaryWeapon, secondaryWeapon) {
         this.primaryWeapon = primaryWeapon;
         this.secondaryWeapon = secondaryWeapon;
     }
