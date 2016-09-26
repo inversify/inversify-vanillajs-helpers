@@ -449,7 +449,7 @@ describe("Register Helper", () => {
         register<Katana>("Katana")(Katana);
         register<Shuriken>("Shuriken")(Shuriken);
 
-        registerProvider<interfaces.Factory<Katana>, Katana>("Factory<Katana>", (context) => {
+        registerProvider<interfaces.Provider<Katana>, Katana>("Provider<Katana>", (context) => {
             return () => {
                 return new Promise<Katana>((resolve) => {
                     let katana = context.kernel.get<Katana>("Katana");
@@ -458,7 +458,7 @@ describe("Register Helper", () => {
             };
         });
 
-        registerProvider<interfaces.Factory<Shuriken>, Shuriken>("Factory<Shuriken>", (context) => {
+        registerProvider<interfaces.Provider<Shuriken>, Shuriken>("Provider<Shuriken>", (context) => {
             return () => {
                 return new Promise<Shuriken>((resolve) => {
                     let katana = context.kernel.get<Shuriken>("Shuriken");
@@ -467,7 +467,7 @@ describe("Register Helper", () => {
             };
         });
 
-        register<Ninja>("Ninja", ["Factory<Katana>", "Factory<Shuriken>"])(Ninja);
+        register<Ninja>("Ninja", ["Provider<Katana>", "Provider<Shuriken>"])(Ninja);
 
         let ninja1 = kernel.get<Ninja>("Ninja");
         expect(ninja1.katana).to.eql(null);

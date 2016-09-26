@@ -1,6 +1,6 @@
 {
   "name": "inversify-vanillajs-helpers",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "description": "Some helper for the development of InversifyJS applications with VanillaJS",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
