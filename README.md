@@ -135,7 +135,27 @@ kernel.bind(TYPES.Ninja).to(Ninja);
 You can just write:
 
 ```js
-helpers.register(kernel, TYPES.Ninja, [TYPES.Katana, TYPES.Shuriken])(Ninja);
+let register = helpers.register(kernel);
+register(TYPES.Ninja, [TYPES.Katana, TYPES.Shuriken])(Ninja);
+```
+
+This helper can also be used as a class decorator when using Babel (continue reading for more details):
+
+```js
+let register = helpers.register(kernel);
+
+@register(TYPES.Ninja, [TYPES.Katana, TYPES.Shuriken])
+class Ninja {
+
+  constructor(katana, shuriken) {
+      this._katana = katana;
+      this._shuriken = shuriken;
+  }
+
+  fight () { return this._katana.hit() }
+  sneak () { return this._shuriken.throw() }
+
+}
 ```
 
 Let's take a look to an example:
