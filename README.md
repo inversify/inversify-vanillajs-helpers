@@ -24,7 +24,7 @@ $ npm install inversify-vanillajs-helpers
 import { helpers } from "inversify-vanillajs-helpers";
 ```
 ```js
-var helpers = require("inversify-vanillajs-helpers");
+var helpers = require("inversify-vanillajs-helpers").helpers;
 ```
 
 ## Annotation helper
@@ -46,7 +46,7 @@ Let's take a look to an example:
 
 ```js
 var inversify = require("inversify");
-var helpers = require("inversify-vanillajs-helpers");
+var helpers = require("inversify-vanillajs-helpers").helpers;
 require("reflect-metadata");
 
 var TYPES = {
@@ -162,7 +162,7 @@ Let's take a look to an example:
 
 ```js
 var inversify = require("inversify");
-var helpers =  require("inversify-vanillajs-helpers");
+var helpers =  require("inversify-vanillajs-helpers").helpers;
 require("reflect-metadata");
 
 var TYPES = {
@@ -302,8 +302,13 @@ register(TYPES.Ninja, [
 ## Babel decorators
 If you are using babel you can also use the `register` helper as a class
 decorator with the [`transform-decorators-legacy`](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) plugin.
+
 ```js
-let kernel = new Kernel();
+let helpers = require("inversify-vanillajs-helpers").helpers;
+let inversify = require("inversify");
+require("reflect-metadata");
+
+let kernel = new inversify.Kernel();
 let register = helpers.register(kernel);
 
 let TYPE = {
@@ -348,4 +353,50 @@ class Ninja {
 let ninja = kernel.get(TYPE.Warrior);
 expect(ninja.primaryWeapon.name).to.eql("Katana");
 expect(ninja.secondaryWeapon.name).to.eql("Shuriken");
+```
+
+## Live demo
+A live demo can be found [here](https://runkit.com/remojansen/inversify-vanillajs-helpers-demo).
+
+```js
+var helpers = require("inversify-vanillajs-helpers").helpers;
+var inversify = require("inversify");
+require("reflect-metadata");
+
+class Katana {
+    constructor() {
+        this.name = "Katana";
+    }
+}
+
+class Shuriken {
+    constructor() {
+        this.name = "Shuriken";
+    }
+}
+
+class Ninja {
+    constructor(primaryWeapon, secondaryWeapon) {
+        this.primaryWeapon = primaryWeapon;
+        this.secondaryWeapon = secondaryWeapon;
+    }
+}
+
+let kernel = new inversify.Kernel();
+let register = helpers.register(kernel);
+ 
+let TYPE = {
+    Warrior: "Warrior",
+    Weapon: "Weapon"
+};
+
+register(TYPE.Weapon, [], (b) => b.whenTargetTagged("throwable", false))(Katana);
+register(TYPE.Weapon, [], (b) => b.whenTargetTagged("throwable", true))(Shuriken);
+
+register(TYPE.Warrior, [
+    { tagged: { key: "throwable", value: false }, type: TYPE.Weapon },
+    { tagged: { key: "throwable", value: true }, type: TYPE.Weapon }
+])(Ninja);
+ 
+kernel.get(TYPE.Warrior);
 ```
