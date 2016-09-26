@@ -135,7 +135,7 @@ kernel.bind(TYPES.Ninja).to(Ninja);
 You can just write:
 
 ```js
-helpers.register(kernel, TYPES.Ninja, Ninja, [TYPES.Katana, TYPES.Shuriken]);
+helpers.register(kernel, TYPES.Ninja, [TYPES.Katana, TYPES.Shuriken])(Ninja);
 ```
 
 Let's take a look to an example:
@@ -178,9 +178,9 @@ class Ninja {
 // Declare bindings
 var kernel = new inversify.Kernel();
 var register = helpers.register(kernel);
-register(TYPES.Katana, Katana);
-register(TYPES.Shuriken, Shuriken);
-register(TYPES.Ninja, Ninja, [TYPES.Katana, TYPES.Shuriken]);
+register(TYPES.Katana)(Katana);
+register(TYPES.Shuriken)(Shuriken);
+register(TYPES.Ninja, [TYPES.Katana, TYPES.Shuriken])(Ninja);
 
 // Resolve dependencies
 var ninja = kernel.get(TYPES.Ninja);
@@ -193,7 +193,7 @@ We can use the helpers to register many types of bindings.
 
 ```js
 var registerSelf = helpers.registerSelf(kernel);
-registerSelf(Katana); // Katana is a class
+registerSelf()(Katana);
 ```
 
 ### registerConstantValue
@@ -214,7 +214,7 @@ registerDynamicValue(TYPES.Katana, (context) => { new Katana(); });
 
 ```js
 var registerConstructor = helpers.registerConstructor(kernel);
-registerConstructor(TYPES.Katana, Katana);
+registerConstructor(TYPES.Katana)(Katana);
 ```
 
 ### registerFunction
@@ -264,10 +264,63 @@ The register helper allows access to the fluent binding declaration API:
 
 ```js
 var register = helpers.register(kernel);
-register(TYPES.Weapon, Katana).whenTargetTagged("throwable", false);
-register(TYPES.Weapon, Shuriken).whenTargetTagged("throwable", true);
-register(TYPES.Ninja, Ninja, [
+
+register(TYPES.Weapon, (b) => { b.whenTargetTagged("throwable", false); })(Katana);
+register(TYPES.Weapon, (b) => { b.whenTargetTagged("throwable", true); })(Shuriken);
+
+register(TYPES.Ninja, [
   { tagged: { key: "throwable", value: false }, type: "Weapon" },
   { tagged: { key: "throwable", value: true }, type: "Weapon" }
-]);
+])(Ninja);
+```
+
+## Babel decorators
+If you are using babel you can also use the `register` helper as a class
+decorator with the [`transform-decorators-legacy`](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) plugin.
+```js
+let kernel = new Kernel();
+let register = helpers.register(kernel);
+
+let TYPE = {
+    Warrior: "Warrior",
+    Weapon: "Weapon"
+};
+
+@register(
+    TYPE.Weapon, [],
+    (b) => { b.whenTargetTagged("throwable", false); }
+)
+class Katana {
+    constructor() {
+        this.name = "Katana";
+    }
+}
+
+@register(
+    TYPE.Weapon, [],
+    (b) => { b.whenTargetTagged("throwable", true); }
+)
+class Shuriken {
+    constructor() {
+        this.name = "Shuriken";
+    }
+}
+
+@register(
+    TYPE.Warrior,
+    [
+        { tagged: { key: "throwable", value: false }, type: TYPE.Weapon },
+        { tagged: { key: "throwable", value: true }, type: TYPE.Weapon }
+    ]
+)
+class Ninja {
+    constructor(primaryWeapon: Weapon, secondaryWeapon: Weapon) {
+        this.primaryWeapon = primaryWeapon;
+        this.secondaryWeapon = secondaryWeapon;
+    }
+}
+
+let ninja = kernel.get(TYPE.Warrior);
+expect(ninja.primaryWeapon.name).to.eql("Katana");
+expect(ninja.secondaryWeapon.name).to.eql("Shuriken");
 ```

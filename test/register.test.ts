@@ -31,9 +31,9 @@ describe("Register Helper", () => {
 
         let kernel = new Kernel();
         let register = helpers.register(kernel);
-        register<Katana>("Katana", Katana);
-        register<Shuriken>("Shuriken", Shuriken);
-        register<Ninja>("Ninja", Ninja, [ "Katana", "Shuriken" ]);
+        register<Katana>("Katana")(Katana);
+        register<Shuriken>("Shuriken")(Shuriken);
+        register<Ninja>("Ninja", [ "Katana", "Shuriken" ])(Ninja);
 
         let ninja = kernel.get<Ninja>("Ninja");
         expect(ninja.katana.name).to.eql("Katana");
@@ -68,9 +68,9 @@ describe("Register Helper", () => {
 
         let kernel = new Kernel();
         let registerSelf = helpers.registerSelf(kernel);
-        registerSelf<Katana>(Katana);
-        registerSelf<Shuriken>(Shuriken);
-        registerSelf<Ninja>(Ninja, [Katana, Shuriken]);
+        registerSelf<Katana>()(Katana);
+        registerSelf<Shuriken>()(Shuriken);
+        registerSelf<Ninja>([Katana, Shuriken])(Ninja);
 
         let ninja = kernel.get<Ninja>(Ninja);
         expect(ninja.katana.name).to.eql("Katana");
@@ -105,9 +105,9 @@ describe("Register Helper", () => {
 
         let kernel = new Kernel();
         let registerConstructor = helpers.registerConstructor(kernel);
-        registerConstructor<Katana>("Newable<Katana>", Katana);
-        registerConstructor<Shuriken>("Newable<Shuriken>", Shuriken);
-        registerConstructor<Ninja>("Newable<Ninja>", Ninja);
+        registerConstructor<Katana>("Newable<Katana>")(Katana);
+        registerConstructor<Shuriken>("Newable<Shuriken>")(Shuriken);
+        registerConstructor<Ninja>("Newable<Ninja>")(Ninja);
 
         let ninjaConstructor = kernel.get<interfaces.Newable<Ninja>>("Newable<Ninja>");
         let katanaConstructor = kernel.get<interfaces.Newable<Katana>>("Newable<Katana>");
@@ -318,11 +318,11 @@ describe("Register Helper", () => {
         let kernel = new Kernel();
         let registerAutoFactory = helpers.registerAutoFactory(kernel);
         let register = helpers.register(kernel);
-        register<Katana>("Katana", Katana);
-        register<Shuriken>("Shuriken", Shuriken);
+        register<Katana>("Katana")(Katana);
+        register<Shuriken>("Shuriken")(Shuriken);
         registerAutoFactory<interfaces.Factory<Katana>, Katana>("Factory<Katana>", "Katana");
         registerAutoFactory<interfaces.Factory<Shuriken>, Shuriken>("Factory<Shuriken>", "Shuriken");
-        register<Ninja>("Ninja", Ninja, ["Factory<Katana>", "Factory<Shuriken>"]);
+        register<Ninja>("Ninja", ["Factory<Katana>", "Factory<Shuriken>"])(Ninja);
 
         let ninja1 = kernel.get<Ninja>("Ninja");
         expect(ninja1.katana.name).to.eql("Katana");
@@ -372,8 +372,8 @@ describe("Register Helper", () => {
         let kernel = new Kernel();
         let registerFactory = helpers.registerFactory(kernel);
         let register = helpers.register(kernel);
-        register<Katana>("Katana", Katana);
-        register<Shuriken>("Shuriken", Shuriken);
+        register<Katana>("Katana")(Katana);
+        register<Shuriken>("Shuriken")(Shuriken);
 
         registerFactory<interfaces.Factory<Katana>, Katana>("Factory<Katana>", (context: interfaces.Context) => {
             return () => {
@@ -387,7 +387,7 @@ describe("Register Helper", () => {
             };
         });
 
-        register<Ninja>("Ninja", Ninja, ["Factory<Katana>", "Factory<Shuriken>"]);
+        register<Ninja>("Ninja", ["Factory<Katana>", "Factory<Shuriken>"])(Ninja);
 
         let ninja1 = kernel.get<Ninja>("Ninja");
         expect(ninja1.katana.name).to.eql("Katana");
@@ -446,8 +446,8 @@ describe("Register Helper", () => {
         let kernel = new Kernel();
         let registerProvider = helpers.registerProvider(kernel);
         let register = helpers.register(kernel);
-        register<Katana>("Katana", Katana);
-        register<Shuriken>("Shuriken", Shuriken);
+        register<Katana>("Katana")(Katana);
+        register<Shuriken>("Shuriken")(Shuriken);
 
         registerProvider<interfaces.Factory<Katana>, Katana>("Factory<Katana>", (context) => {
             return () => {
@@ -467,7 +467,7 @@ describe("Register Helper", () => {
             };
         });
 
-        register<Ninja>("Ninja", Ninja, ["Factory<Katana>", "Factory<Shuriken>"]);
+        register<Ninja>("Ninja", ["Factory<Katana>", "Factory<Shuriken>"])(Ninja);
 
         let ninja1 = kernel.get<Ninja>("Ninja");
         expect(ninja1.katana).to.eql(null);
@@ -524,16 +524,26 @@ describe("Register Helper", () => {
 
         let kernel = new Kernel();
         let register = helpers.register(kernel);
-        register<Weapon>("Weapon", Katana).whenTargetNamed("not-throwable");
-        register<Weapon>("Weapon", Shuriken).whenTargetNamed("throwable");
+
+        register<Weapon>(
+            "Weapon",
+            [],
+            (b: interfaces.BindingInWhenOnSyntax<Weapon>) => { b.whenTargetNamed("not-throwable"); }
+        )(Katana);
+
+        register<Weapon>(
+            "Weapon",
+            [],
+            (b: interfaces.BindingInWhenOnSyntax<Weapon>) => { b.whenTargetNamed("throwable"); }
+        )(Shuriken);
+
         register<Warrior>(
             "Warrior",
-            Ninja,
             [
                 { named: "not-throwable", type: "Weapon" },
                 { named: "throwable", type: "Weapon" }
             ]
-        );
+        )(Ninja);
 
         let ninja = kernel.get<Ninja>("Warrior");
         expect(ninja.primaryWeapon.name).to.eql("Katana");
@@ -581,20 +591,89 @@ describe("Register Helper", () => {
             Warrior: "Warrior",
             Weapon: "Weapon"
         };
-        register<Weapon>(TYPE.Weapon, Katana).whenTargetTagged("throwable", false);
-        register<Weapon>(TYPE.Weapon, Shuriken).whenTargetTagged("throwable", true);
 
-        let katana = kernel.getTagged<Ninja>(TYPE.Weapon, "throwable", false);
-        console.log(katana);
+        register<Weapon>(
+            TYPE.Weapon,
+            [],
+            (b: interfaces.BindingInWhenOnSyntax<Weapon>) => { b.whenTargetTagged("throwable", false); }
+        )(Katana);
+
+        register<Weapon>(
+            TYPE.Weapon,
+            [],
+            (b: interfaces.BindingInWhenOnSyntax<Weapon>) => { b.whenTargetTagged("throwable", true); }
+        )(Shuriken);
 
         register<Warrior>(
             TYPE.Warrior,
-            Ninja,
             [
                 { tagged: { key: "throwable", value: false }, type: TYPE.Weapon },
                 { tagged: { key: "throwable", value: true }, type: TYPE.Weapon }
             ]
-        );
+        )(Ninja);
+
+        let ninja = kernel.get<Ninja>(TYPE.Warrior);
+        expect(ninja.primaryWeapon.name).to.eql("Katana");
+        expect(ninja.secondaryWeapon.name).to.eql("Shuriken");
+
+    });
+
+    it("Should allow to use register helper as a class decorator", () => {
+
+        let kernel = new Kernel();
+        let register = helpers.register(kernel);
+
+        let TYPE = {
+            Warrior: "Warrior",
+            Weapon: "Weapon"
+        };
+
+        interface Weapon {
+            name: string;
+        }
+
+        interface Warrior {
+            primaryWeapon: Weapon;
+            secondaryWeapon: Weapon;
+        }
+
+        @register<Weapon>(
+            TYPE.Weapon, [],
+            (b: interfaces.BindingInWhenOnSyntax<Weapon>) => { b.whenTargetTagged("throwable", false); }
+        )
+        class Katana implements Weapon {
+            public name: string;
+            public constructor() {
+                this.name = "Katana";
+            }
+        }
+
+        @register<Weapon>(
+            TYPE.Weapon, [],
+            (b: interfaces.BindingInWhenOnSyntax<Weapon>) => { b.whenTargetTagged("throwable", true); }
+        )
+        class Shuriken implements Weapon {
+            public name: string;
+            public constructor() {
+                this.name = "Shuriken";
+            }
+        }
+
+        @register<Warrior>(
+            TYPE.Warrior,
+            [
+                { tagged: { key: "throwable", value: false }, type: TYPE.Weapon },
+                { tagged: { key: "throwable", value: true }, type: TYPE.Weapon }
+            ]
+        )
+        class Ninja {
+            public primaryWeapon: Weapon;
+            public secondaryWeapon: Weapon;
+            public constructor(primaryWeapon: Weapon, secondaryWeapon: Weapon) {
+                this.primaryWeapon = primaryWeapon;
+                this.secondaryWeapon = secondaryWeapon;
+            }
+        }
 
         let ninja = kernel.get<Ninja>(TYPE.Warrior);
         expect(ninja.primaryWeapon.name).to.eql("Katana");
