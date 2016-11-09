@@ -1,13 +1,13 @@
 import { expect } from "chai";
-import { Kernel, interfaces } from "inversify";
+import { Container, interfaces } from "inversify";
 import { helpers } from "../src/index";
 
 describe("Register helper as a decorator", () => {
 
     it("Should allow to use register helper as a class decorator", () => {
 
-        let kernel = new Kernel();
-        let register = helpers.register(kernel);
+        let container = new Container();
+        let register = helpers.register(container);
 
         let TYPE = {
             Warrior: "Warrior",
@@ -61,7 +61,7 @@ describe("Register helper as a decorator", () => {
             }
         }
 
-        let ninja = kernel.get<Ninja>(TYPE.Warrior);
+        let ninja = container.get<Ninja>(TYPE.Warrior);
         expect(ninja.primaryWeapon.name).to.eql("Katana");
         expect(ninja.secondaryWeapon.name).to.eql("Shuriken");
 

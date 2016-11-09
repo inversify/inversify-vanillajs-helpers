@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Kernel } from "inversify";
+import { Container } from "inversify";
 import { helpers } from "../src/index";
 
 describe("Annotate Helper", () => {
@@ -29,15 +29,15 @@ describe("Annotate Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
+        let container = new Container();
         helpers.annotate(Katana);
         helpers.annotate(Shuriken);
         helpers.annotate(Ninja, [ "Katana", "Shuriken" ]);
-        kernel.bind<Katana>("Katana").to(Katana);
-        kernel.bind<Shuriken>("Shuriken").to(Shuriken);
-        kernel.bind<Ninja>("Ninja").to(Ninja);
+        container.bind<Katana>("Katana").to(Katana);
+        container.bind<Shuriken>("Shuriken").to(Shuriken);
+        container.bind<Ninja>("Ninja").to(Ninja);
 
-        let ninja = kernel.get<Ninja>("Ninja");
+        let ninja = container.get<Ninja>("Ninja");
         expect(ninja.katana.name).to.eql("Katana");
         expect(ninja.shuriken.name).to.eql("Shuriken");
 
@@ -72,15 +72,15 @@ describe("Annotate Helper", () => {
         let NotTrowableWeaponId = Symbol("NotTrowableWeapon");
         let NinjaId = Symbol("Ninja");
 
-        let kernel = new Kernel();
+        let container = new Container();
         helpers.annotate(Katana);
         helpers.annotate(Shuriken);
         helpers.annotate(Ninja, [NotTrowableWeaponId, ThrowableWeaponId]);
-        kernel.bind<Katana>(NotTrowableWeaponId).to(Katana);
-        kernel.bind<Shuriken>(ThrowableWeaponId).to(Shuriken);
-        kernel.bind<Ninja>(NinjaId).to(Ninja);
+        container.bind<Katana>(NotTrowableWeaponId).to(Katana);
+        container.bind<Shuriken>(ThrowableWeaponId).to(Shuriken);
+        container.bind<Ninja>(NinjaId).to(Ninja);
 
-        let ninja = kernel.get<Ninja>(NinjaId);
+        let ninja = container.get<Ninja>(NinjaId);
         expect(ninja.katana.name).to.eql("Katana");
         expect(ninja.shuriken.name).to.eql("Shuriken");
 
@@ -111,15 +111,15 @@ describe("Annotate Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
+        let container = new Container();
         helpers.annotate(Katana);
         helpers.annotate(Shuriken);
         helpers.annotate(Ninja, [ Katana, Shuriken ]);
-        kernel.bind<Katana>(Katana).toSelf();
-        kernel.bind<Shuriken>(Shuriken).toSelf();
-        kernel.bind<Ninja>(Ninja).to(Ninja);
+        container.bind<Katana>(Katana).toSelf();
+        container.bind<Shuriken>(Shuriken).toSelf();
+        container.bind<Ninja>(Ninja).to(Ninja);
 
-        let ninja = kernel.get<Ninja>(Ninja);
+        let ninja = container.get<Ninja>(Ninja);
         expect(ninja.katana.name).to.eql("Katana");
         expect(ninja.shuriken.name).to.eql("Shuriken");
 
@@ -150,7 +150,7 @@ describe("Annotate Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
+        let container = new Container();
         helpers.annotate(Katana);
         helpers.annotate(Shuriken);
         helpers.annotate(
@@ -160,11 +160,11 @@ describe("Annotate Helper", () => {
                 { type: "Shuriken" }
             ]
         );
-        kernel.bind<Katana>("Katana").to(Katana);
-        kernel.bind<Shuriken>("Shuriken").to(Shuriken);
-        kernel.bind<Ninja>("Ninja").to(Ninja);
+        container.bind<Katana>("Katana").to(Katana);
+        container.bind<Shuriken>("Shuriken").to(Shuriken);
+        container.bind<Ninja>("Ninja").to(Ninja);
 
-        let ninja = kernel.get<Ninja>("Ninja");
+        let ninja = container.get<Ninja>("Ninja");
         expect(ninja.katana.name).to.eql("Katana");
         expect(ninja.shuriken.name).to.eql("Shuriken");
 
@@ -195,7 +195,7 @@ describe("Annotate Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
+        let container = new Container();
         helpers.annotate(Katana);
         helpers.annotate(Shuriken);
         helpers.annotate(
@@ -205,11 +205,11 @@ describe("Annotate Helper", () => {
                 { named: "throwable", type: "Weapon" }
             ]
         );
-        kernel.bind<Katana>("Weapon").to(Katana).whenTargetNamed("not-throwable");
-        kernel.bind<Shuriken>("Weapon").to(Shuriken).whenTargetNamed("throwable");
-        kernel.bind<Ninja>("Ninja").to(Ninja);
+        container.bind<Katana>("Weapon").to(Katana).whenTargetNamed("not-throwable");
+        container.bind<Shuriken>("Weapon").to(Shuriken).whenTargetNamed("throwable");
+        container.bind<Ninja>("Ninja").to(Ninja);
 
-        let ninja = kernel.get<Ninja>("Ninja");
+        let ninja = container.get<Ninja>("Ninja");
         expect(ninja.katana.name).to.eql("Katana");
         expect(ninja.shuriken.name).to.eql("Shuriken");
 
@@ -240,7 +240,7 @@ describe("Annotate Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
+        let container = new Container();
         helpers.annotate(Katana);
         helpers.annotate(Shuriken);
         helpers.annotate(
@@ -250,11 +250,11 @@ describe("Annotate Helper", () => {
                 { tagged: { key: "throwable", value: true }, type: "Weapon" }
             ]
         );
-        kernel.bind<Katana>("Weapon").to(Katana).whenTargetTagged("throwable", false);
-        kernel.bind<Shuriken>("Weapon").to(Shuriken).whenTargetTagged("throwable", true);
-        kernel.bind<Ninja>("Ninja").to(Ninja);
+        container.bind<Katana>("Weapon").to(Katana).whenTargetTagged("throwable", false);
+        container.bind<Shuriken>("Weapon").to(Shuriken).whenTargetTagged("throwable", true);
+        container.bind<Ninja>("Ninja").to(Ninja);
 
-        let ninja = kernel.get<Ninja>("Ninja");
+        let ninja = container.get<Ninja>("Ninja");
         expect(ninja.katana.name).to.eql("Katana");
         expect(ninja.shuriken.name).to.eql("Shuriken");
 
