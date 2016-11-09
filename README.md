@@ -86,13 +86,13 @@ class Ninja {
 helpers.annotate(Ninja, [TYPES.Katana, TYPES.Shuriken]);
 
 // Declare bindings
-var kernel = new inversify.Kernel()
-kernel.bind(TYPES.Ninja).to(Ninja);
-kernel.bind(TYPES.Katana).to(Katana);
-kernel.bind(TYPES.Shuriken).to(Shuriken);
+var container = new inversify.Container()
+container.bind(TYPES.Ninja).to(Ninja);
+container.bind(TYPES.Katana).to(Katana);
+container.bind(TYPES.Shuriken).to(Shuriken);
 
 // Resolve dependencies
-var ninja = kernel.get(TYPES.Ninja);
+var ninja = container.get(TYPES.Ninja);
 console.log(ninja.fight(), ninja.sneak());
 ```
 
@@ -129,20 +129,20 @@ Helps you to reduce annotation and registration boilerplate when working with Va
 inversify.decorate(inversify.injectable(), Ninja);
 inversify.decorate(inversify.inject(TYPES.Katana), Ninja, 0);
 inversify.decorate(inversify.inject(TYPES.Shuriken), Ninja, 1);
-kernel.bind(TYPES.Ninja).to(Ninja);
+container.bind(TYPES.Ninja).to(Ninja);
 ```
 
 You can just write:
 
 ```js
-let register = helpers.register(kernel);
+let register = helpers.register(container);
 register(TYPES.Ninja, [TYPES.Katana, TYPES.Shuriken])(Ninja);
 ```
 
 This helper can also be used as a class decorator when using Babel (continue reading for more details):
 
 ```js
-let register = helpers.register(kernel);
+let register = helpers.register(container);
 
 @register(TYPES.Ninja, [TYPES.Katana, TYPES.Shuriken])
 class Ninja {
@@ -196,14 +196,14 @@ class Ninja {
 }
 
 // Declare bindings
-var kernel = new inversify.Kernel();
-var register = helpers.register(kernel);
+var container = new inversify.Container();
+var register = helpers.register(container);
 register(TYPES.Katana)(Katana);
 register(TYPES.Shuriken)(Shuriken);
 register(TYPES.Ninja, [TYPES.Katana, TYPES.Shuriken])(Ninja);
 
 // Resolve dependencies
-var ninja = kernel.get(TYPES.Ninja);
+var ninja = container.get(TYPES.Ninja);
 console.log(ninja.fight(), ninja.sneak());
 ```
 
@@ -212,35 +212,35 @@ We can use the helpers to register many types of bindings.
 ### registerSelf
 
 ```js
-var registerSelf = helpers.registerSelf(kernel);
+var registerSelf = helpers.registerSelf(container);
 registerSelf()(Katana);
 ```
 
 ### registerConstantValue
 
 ```js
-var registerConstantValue = helpers.registerConstantValue(kernel);
+var registerConstantValue = helpers.registerConstantValue(container);
 registerConstantValue(TYPES.Katana, new Katana());
 ```
 
 ### registerDynamicValue
 
 ```js
-var registerDynamicValue = helpers.registerDynamicValue(kernel);
+var registerDynamicValue = helpers.registerDynamicValue(container);
 registerDynamicValue(TYPES.Katana, (context) => { new Katana(); });
 ```
 
 ### registerConstructor
 
 ```js
-var registerConstructor = helpers.registerConstructor(kernel);
+var registerConstructor = helpers.registerConstructor(container);
 registerConstructor(TYPES.Katana)(Katana);
 ```
 
 ### registerFunction
 
 ```js
-var registerFunction = helpers.registerFunction(kernel);
+var registerFunction = helpers.registerFunction(container);
 registerFunction(TYPES.SomeFunction, () {
   console.log("I'm doing something...");
 });
@@ -249,17 +249,17 @@ registerFunction(TYPES.SomeFunction, () {
 ### registerAutoFactory
 
 ```js
-var registerAutoFactory = helpers.registerAutoFactory(kernel);
+var registerAutoFactory = helpers.registerAutoFactory(container);
 registerAutoFactory(TYPES.KatanaFactory, TYPES.Katana);
 ```
 
 ### registerFactory
 
 ```js
-var registerFactory = helpers.registerFactory(kernel);
+var registerFactory = helpers.registerFactory(container);
 registerFactory(TYPES.KatanaFactory, (context) => {
   return () => {
-    return context.kernel.get("Katana");
+    return context.container.get("Katana");
   };
 });
 ```
@@ -267,11 +267,11 @@ registerFactory(TYPES.KatanaFactory, (context) => {
 ### registerProvider
 
 ```js
-var registerProvider = helpers.registerProvider(kernel);
+var registerProvider = helpers.registerProvider(container);
 registerProvider(TYPES.KatanaProvider, (context) => {
     return () => {
         return new Promise<Katana>((resolve) => {
-            let katana = context.kernel.get("Katana");
+            let katana = context.container.get("Katana");
             resolve(katana);
         });
     };
@@ -283,7 +283,7 @@ registerProvider(TYPES.KatanaProvider, (context) => {
 The register helper allows access to the fluent binding declaration API:
 
 ```js
-var register = helpers.register(kernel);
+var register = helpers.register(container);
 
 register(TYPES.Weapon, (b) => {
     b.whenTargetTagged("throwable", false);
@@ -308,8 +308,8 @@ let helpers = require("inversify-vanillajs-helpers").helpers;
 let inversify = require("inversify");
 require("reflect-metadata");
 
-let kernel = new inversify.Kernel();
-let register = helpers.register(kernel);
+let container = new inversify.Container();
+let register = helpers.register(container);
 
 let TYPE = {
     Warrior: "Warrior",
@@ -350,7 +350,7 @@ class Ninja {
     }
 }
 
-let ninja = kernel.get(TYPE.Warrior);
+let ninja = container.get(TYPE.Warrior);
 expect(ninja.primaryWeapon.name).to.eql("Katana");
 expect(ninja.secondaryWeapon.name).to.eql("Shuriken");
 ```
@@ -382,8 +382,8 @@ class Ninja {
     }
 }
 
-let kernel = new inversify.Kernel();
-let register = helpers.register(kernel);
+let container = new inversify.Container();
+let register = helpers.register(container);
  
 let TYPE = {
     Warrior: "Warrior",
@@ -398,5 +398,5 @@ register(TYPE.Warrior, [
     { tagged: { key: "throwable", value: true }, type: TYPE.Weapon }
 ])(Ninja);
  
-kernel.get(TYPE.Warrior);
+container.get(TYPE.Warrior);
 ```

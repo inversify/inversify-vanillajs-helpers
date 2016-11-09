@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Kernel, interfaces } from "inversify";
+import { Container, interfaces } from "inversify";
 import { helpers } from "../src/index";
 
 describe("Register Helper", () => {
@@ -29,13 +29,13 @@ describe("Register Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let register = helpers.register(kernel);
+        let container = new Container();
+        let register = helpers.register(container);
         register<Katana>("Katana")(Katana);
         register<Shuriken>("Shuriken")(Shuriken);
         register<Ninja>("Ninja", [ "Katana", "Shuriken" ])(Ninja);
 
-        let ninja = kernel.get<Ninja>("Ninja");
+        let ninja = container.get<Ninja>("Ninja");
         expect(ninja.katana.name).to.eql("Katana");
         expect(ninja.shuriken.name).to.eql("Shuriken");
 
@@ -66,13 +66,13 @@ describe("Register Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerSelf = helpers.registerSelf(kernel);
+        let container = new Container();
+        let registerSelf = helpers.registerSelf(container);
         registerSelf<Katana>()(Katana);
         registerSelf<Shuriken>()(Shuriken);
         registerSelf<Ninja>([Katana, Shuriken])(Ninja);
 
-        let ninja = kernel.get<Ninja>(Ninja);
+        let ninja = container.get<Ninja>(Ninja);
         expect(ninja.katana.name).to.eql("Katana");
         expect(ninja.shuriken.name).to.eql("Shuriken");
 
@@ -103,15 +103,15 @@ describe("Register Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerConstructor = helpers.registerConstructor(kernel);
+        let container = new Container();
+        let registerConstructor = helpers.registerConstructor(container);
         registerConstructor<Katana>("Newable<Katana>")(Katana);
         registerConstructor<Shuriken>("Newable<Shuriken>")(Shuriken);
         registerConstructor<Ninja>("Newable<Ninja>")(Ninja);
 
-        let ninjaConstructor = kernel.get<interfaces.Newable<Ninja>>("Newable<Ninja>");
-        let katanaConstructor = kernel.get<interfaces.Newable<Katana>>("Newable<Katana>");
-        let shurikenConstructor = kernel.get<interfaces.Newable<Shuriken>>("Newable<Shuriken>");
+        let ninjaConstructor = container.get<interfaces.Newable<Ninja>>("Newable<Ninja>");
+        let katanaConstructor = container.get<interfaces.Newable<Katana>>("Newable<Katana>");
+        let shurikenConstructor = container.get<interfaces.Newable<Shuriken>>("Newable<Shuriken>");
 
         let ninja = new ninjaConstructor(new katanaConstructor(), new shurikenConstructor());
         expect(ninja.katana.name).to.eql("Katana");
@@ -152,18 +152,18 @@ describe("Register Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerConstantValue = helpers.registerConstantValue(kernel);
+        let container = new Container();
+        let registerConstantValue = helpers.registerConstantValue(container);
         registerConstantValue<Ninja>("Ninja", new Ninja(new Katana(), new Shuriken()));
 
-        let ninja1 = kernel.get<Ninja>("Ninja");
+        let ninja1 = container.get<Ninja>("Ninja");
         expect(ninja1.katana.name).to.eql("Katana");
         expect(ninja1.shuriken.name).to.eql("Shuriken");
         expect(ninja1.getHealth()).to.eql(100);
         ninja1.takeHit();
         expect(ninja1.getHealth()).to.eql(90);
 
-        let ninja2 = kernel.get<Ninja>("Ninja");
+        let ninja2 = container.get<Ninja>("Ninja");
         expect(ninja2.katana.name).to.eql("Katana");
         expect(ninja2.shuriken.name).to.eql("Shuriken");
         expect(ninja2.getHealth()).to.eql(90);
@@ -205,18 +205,18 @@ describe("Register Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerDynamicValue = helpers.registerDynamicValue(kernel);
+        let container = new Container();
+        let registerDynamicValue = helpers.registerDynamicValue(container);
         registerDynamicValue<Ninja>("Ninja", () => { return new Ninja(new Katana(), new Shuriken()); });
 
-        let ninja1 = kernel.get<Ninja>("Ninja");
+        let ninja1 = container.get<Ninja>("Ninja");
         expect(ninja1.katana.name).to.eql("Katana");
         expect(ninja1.shuriken.name).to.eql("Shuriken");
         expect(ninja1.getHealth()).to.eql(100);
         ninja1.takeHit();
         expect(ninja1.getHealth()).to.eql(90);
 
-        let ninja2 = kernel.get<Ninja>("Ninja");
+        let ninja2 = container.get<Ninja>("Ninja");
         expect(ninja2.katana.name).to.eql("Katana");
         expect(ninja2.shuriken.name).to.eql("Shuriken");
         expect(ninja2.getHealth()).to.eql(100);
@@ -258,11 +258,11 @@ describe("Register Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerFunction = helpers.registerFunction(kernel);
+        let container = new Container();
+        let registerFunction = helpers.registerFunction(container);
         registerFunction<() => Ninja>("Ninja", () => { return new Ninja(new Katana(), new Shuriken()); });
 
-        let getNinja = kernel.get<() => Ninja>("Ninja");
+        let getNinja = container.get<() => Ninja>("Ninja");
         let ninja1 = getNinja();
         expect(ninja1.katana.name).to.eql("Katana");
         expect(ninja1.shuriken.name).to.eql("Shuriken");
@@ -315,16 +315,16 @@ describe("Register Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerAutoFactory = helpers.registerAutoFactory(kernel);
-        let register = helpers.register(kernel);
+        let container = new Container();
+        let registerAutoFactory = helpers.registerAutoFactory(container);
+        let register = helpers.register(container);
         register<Katana>("Katana")(Katana);
         register<Shuriken>("Shuriken")(Shuriken);
         registerAutoFactory<interfaces.Factory<Katana>, Katana>("Factory<Katana>", "Katana");
         registerAutoFactory<interfaces.Factory<Shuriken>, Shuriken>("Factory<Shuriken>", "Shuriken");
         register<Ninja>("Ninja", ["Factory<Katana>", "Factory<Shuriken>"])(Ninja);
 
-        let ninja1 = kernel.get<Ninja>("Ninja");
+        let ninja1 = container.get<Ninja>("Ninja");
         expect(ninja1.katana.name).to.eql("Katana");
         expect(ninja1.shuriken.name).to.eql("Shuriken");
         expect(ninja1.getHealth()).to.eql(100);
@@ -369,27 +369,27 @@ describe("Register Helper", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerFactory = helpers.registerFactory(kernel);
-        let register = helpers.register(kernel);
+        let container = new Container();
+        let registerFactory = helpers.registerFactory(container);
+        let register = helpers.register(container);
         register<Katana>("Katana")(Katana);
         register<Shuriken>("Shuriken")(Shuriken);
 
         registerFactory<interfaces.Factory<Katana>, Katana>("Factory<Katana>", (context: interfaces.Context) => {
             return () => {
-                return context.kernel.get<Katana>("Katana");
+                return context.container.get<Katana>("Katana");
             };
         });
 
         registerFactory<interfaces.Factory<Shuriken>, Shuriken>("Factory<Shuriken>", (context: interfaces.Context) => {
             return () => {
-                return context.kernel.get<Shuriken>("Shuriken");
+                return context.container.get<Shuriken>("Shuriken");
             };
         });
 
         register<Ninja>("Ninja", ["Factory<Katana>", "Factory<Shuriken>"])(Ninja);
 
-        let ninja1 = kernel.get<Ninja>("Ninja");
+        let ninja1 = container.get<Ninja>("Ninja");
         expect(ninja1.katana.name).to.eql("Katana");
         expect(ninja1.shuriken.name).to.eql("Shuriken");
         expect(ninja1.getHealth()).to.eql(100);
@@ -443,16 +443,16 @@ describe("Register Helper", () => {
 
         }
 
-        let kernel = new Kernel();
-        let registerProvider = helpers.registerProvider(kernel);
-        let register = helpers.register(kernel);
+        let container = new Container();
+        let registerProvider = helpers.registerProvider(container);
+        let register = helpers.register(container);
         register<Katana>("Katana")(Katana);
         register<Shuriken>("Shuriken")(Shuriken);
 
         registerProvider<interfaces.Provider<Katana>, Katana>("Provider<Katana>", (context) => {
             return () => {
                 return new Promise<Katana>((resolve) => {
-                    let katana = context.kernel.get<Katana>("Katana");
+                    let katana = context.container.get<Katana>("Katana");
                     resolve(katana);
                 });
             };
@@ -461,7 +461,7 @@ describe("Register Helper", () => {
         registerProvider<interfaces.Provider<Shuriken>, Shuriken>("Provider<Shuriken>", (context) => {
             return () => {
                 return new Promise<Shuriken>((resolve) => {
-                    let katana = context.kernel.get<Shuriken>("Shuriken");
+                    let katana = context.container.get<Shuriken>("Shuriken");
                     resolve(katana);
                 });
             };
@@ -469,7 +469,7 @@ describe("Register Helper", () => {
 
         register<Ninja>("Ninja", ["Provider<Katana>", "Provider<Shuriken>"])(Ninja);
 
-        let ninja1 = kernel.get<Ninja>("Ninja");
+        let ninja1 = container.get<Ninja>("Ninja");
         expect(ninja1.katana).to.eql(null);
         expect(ninja1.shuriken).to.eql(null);
         expect(ninja1.getHealth()).to.eql(100);

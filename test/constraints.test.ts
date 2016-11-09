@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Kernel, interfaces } from "inversify";
+import { Container, interfaces } from "inversify";
 import { helpers } from "../src/index";
 
 describe("Register helper constraints", () => {
@@ -38,8 +38,8 @@ describe("Register helper constraints", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let register = helpers.register(kernel);
+        let container = new Container();
+        let register = helpers.register(container);
 
         register<Weapon>(
             "Weapon",
@@ -61,7 +61,7 @@ describe("Register helper constraints", () => {
             ]
         )(Ninja);
 
-        let ninja = kernel.get<Ninja>("Warrior");
+        let ninja = container.get<Ninja>("Warrior");
         expect(ninja.primaryWeapon.name).to.eql("Katana");
         expect(ninja.secondaryWeapon.name).to.eql("Shuriken");
 
@@ -101,8 +101,8 @@ describe("Register helper constraints", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let register = helpers.register(kernel);
+        let container = new Container();
+        let register = helpers.register(container);
         let TYPE = {
             Warrior: "Warrior",
             Weapon: "Weapon"
@@ -128,7 +128,7 @@ describe("Register helper constraints", () => {
             ]
         )(Ninja);
 
-        let ninja = kernel.get<Ninja>(TYPE.Warrior);
+        let ninja = container.get<Ninja>(TYPE.Warrior);
         expect(ninja.primaryWeapon.name).to.eql("Katana");
         expect(ninja.secondaryWeapon.name).to.eql("Shuriken");
 
@@ -175,8 +175,8 @@ describe("Register helper constraints", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerSelf = helpers.registerSelf(kernel);
+        let container = new Container();
+        let registerSelf = helpers.registerSelf(container);
 
         registerSelf<Katana>(
             [],
@@ -190,7 +190,7 @@ describe("Register helper constraints", () => {
 
         registerSelf<Ninja>([Katana, Shuriken])(Ninja);
 
-        let ninja1 = kernel.get<Ninja>(Ninja);
+        let ninja1 = container.get<Ninja>(Ninja);
         expect(ninja1.katana.name).to.eql("Katana");
         expect(ninja1.shuriken.name).to.eql("Shuriken");
         expect(ninja1.katana.durability()).to.eql(100);
@@ -200,7 +200,7 @@ describe("Register helper constraints", () => {
         expect(ninja1.katana.durability()).to.eql(90);
         expect(ninja1.shuriken.durability()).to.eql(90);
 
-        let ninja2 = kernel.get<Ninja>(Ninja);
+        let ninja2 = container.get<Ninja>(Ninja);
         expect(ninja2.katana.name).to.eql("Katana");
         expect(ninja2.shuriken.name).to.eql("Shuriken");
         expect(ninja2.katana.durability()).to.eql(90);
@@ -246,8 +246,8 @@ describe("Register helper constraints", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerConstructor = helpers.registerConstructor(kernel);
+        let container = new Container();
+        let registerConstructor = helpers.registerConstructor(container);
 
         registerConstructor<Weapon>("Newable<Weapon>", (b: interfaces.BindingWhenOnSyntax<Weapon>) => {
             b.whenTargetTagged("throwable", false);
@@ -259,9 +259,9 @@ describe("Register helper constraints", () => {
 
         registerConstructor<Warrior>("Newable<Warrior>")(Ninja);
 
-        let ninjaConstructor = kernel.get<interfaces.Newable<Warrior>>("Newable<Warrior>");
-        let katanaConstructor = kernel.getTagged<interfaces.Newable<Weapon>>("Newable<Weapon>", "throwable", false);
-        let shurikenConstructor = kernel.getTagged<interfaces.Newable<Weapon>>("Newable<Weapon>", "throwable", true);
+        let ninjaConstructor = container.get<interfaces.Newable<Warrior>>("Newable<Warrior>");
+        let katanaConstructor = container.getTagged<interfaces.Newable<Weapon>>("Newable<Weapon>", "throwable", false);
+        let shurikenConstructor = container.getTagged<interfaces.Newable<Weapon>>("Newable<Weapon>", "throwable", true);
 
         let ninja = new ninjaConstructor(new katanaConstructor(), new shurikenConstructor());
         expect(ninja.katana.name).to.eql("Katana");
@@ -303,9 +303,9 @@ describe("Register helper constraints", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerConstantValue = helpers.registerConstantValue(kernel);
-        let register = helpers.register(kernel);
+        let container = new Container();
+        let registerConstantValue = helpers.registerConstantValue(container);
+        let register = helpers.register(container);
 
         registerConstantValue<Weapon>("Weapon", new Katana(), (b: interfaces.BindingWhenOnSyntax<Weapon>) => {
             b.whenTargetTagged("throwable", false);
@@ -320,7 +320,7 @@ describe("Register helper constraints", () => {
             { tagged: { key: "throwable", value: true }, type: "Weapon" }
         ])(Ninja);
 
-        let ninja = kernel.get<Warrior>("Warrior");
+        let ninja = container.get<Warrior>("Warrior");
         expect(ninja.katana.name).to.eql("Katana");
         expect(ninja.shuriken.name).to.eql("Shuriken");
 
@@ -387,8 +387,8 @@ describe("Register helper constraints", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerDynamicValue = helpers.registerDynamicValue(kernel);
+        let container = new Container();
+        let registerDynamicValue = helpers.registerDynamicValue(container);
 
         registerDynamicValue<Warrior>(
             "Warrior",
@@ -402,28 +402,28 @@ describe("Register helper constraints", () => {
             (b: interfaces.BindingInWhenOnSyntax<Warrior>) => { b.whenTargetNamed("japanese"); }
         );
 
-        let ninja1 = kernel.getNamed<Warrior>("Warrior", "chinese");
+        let ninja1 = container.getNamed<Warrior>("Warrior", "chinese");
         expect(ninja1.name).to.eql("Ninja");
         expect(ninja1.weapon.name).to.eql("Shuriken");
         expect(ninja1.getHealth()).to.eql(100);
         ninja1.takeHit();
         expect(ninja1.getHealth()).to.eql(90);
 
-        let ninja2 = kernel.getNamed<Warrior>("Warrior", "chinese");
+        let ninja2 = container.getNamed<Warrior>("Warrior", "chinese");
         expect(ninja2.name).to.eql("Ninja");
         expect(ninja2.weapon.name).to.eql("Shuriken");
         expect(ninja2.getHealth()).to.eql(100);
         ninja2.takeHit();
         expect(ninja2.getHealth()).to.eql(90);
 
-        let samurai1 = kernel.getNamed<Warrior>("Warrior", "japanese");
+        let samurai1 = container.getNamed<Warrior>("Warrior", "japanese");
         expect(samurai1.name).to.eql("Samurai");
         expect(samurai1.weapon.name).to.eql("Katana");
         expect(samurai1.getHealth()).to.eql(100);
         samurai1.takeHit();
         expect(samurai1.getHealth()).to.eql(90);
 
-        let samurai2 = kernel.getNamed<Warrior>("Warrior", "japanese");
+        let samurai2 = container.getNamed<Warrior>("Warrior", "japanese");
         expect(samurai2.name).to.eql("Samurai");
         expect(samurai2.weapon.name).to.eql("Katana");
         expect(samurai2.getHealth()).to.eql(100);
@@ -469,9 +469,9 @@ describe("Register helper constraints", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerFunction = helpers.registerFunction(kernel);
-        let register = helpers.register(kernel);
+        let container = new Container();
+        let registerFunction = helpers.registerFunction(container);
+        let register = helpers.register(container);
 
         registerFunction<() => Weapon>(
             "Weapon",
@@ -494,14 +494,14 @@ describe("Register helper constraints", () => {
         )(Ninja);
 
 
-        let ninja1 = kernel.get<Ninja>("Ninja");
+        let ninja1 = container.get<Ninja>("Ninja");
         expect(ninja1.katana.name).to.eql("Katana");
         expect(ninja1.shuriken.name).to.eql("Shuriken");
         expect(ninja1.getHealth()).to.eql(100);
         ninja1.takeHit();
         expect(ninja1.getHealth()).to.eql(90);
 
-        let ninja2 = kernel.get<Ninja>("Ninja");
+        let ninja2 = container.get<Ninja>("Ninja");
         expect(ninja2.katana.name).to.eql("Katana");
         expect(ninja2.shuriken.name).to.eql("Shuriken");
         expect(ninja2.getHealth()).to.eql(100);
@@ -550,9 +550,9 @@ describe("Register helper constraints", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerAutoFactory = helpers.registerAutoFactory(kernel);
-        let register = helpers.register(kernel);
+        let container = new Container();
+        let registerAutoFactory = helpers.registerAutoFactory(container);
+        let register = helpers.register(container);
         register<Katana>("Katana")(Katana);
         register<Shuriken>("Shuriken")(Shuriken);
         registerAutoFactory<interfaces.Factory<Katana>, Katana>(
@@ -575,7 +575,7 @@ describe("Register helper constraints", () => {
             ]
         )(Ninja);
 
-        let ninja1 = kernel.get<Ninja>("Ninja");
+        let ninja1 = container.get<Ninja>("Ninja");
         expect(ninja1.katana.name).to.eql("Katana");
         expect(ninja1.shuriken.name).to.eql("Shuriken");
         expect(ninja1.getHealth()).to.eql(100);
@@ -624,9 +624,9 @@ describe("Register helper constraints", () => {
             }
         }
 
-        let kernel = new Kernel();
-        let registerFactory = helpers.registerFactory(kernel);
-        let register = helpers.register(kernel);
+        let container = new Container();
+        let registerFactory = helpers.registerFactory(container);
+        let register = helpers.register(container);
         register<Katana>("Katana")(Katana);
         register<Shuriken>("Shuriken")(Shuriken);
 
@@ -634,7 +634,7 @@ describe("Register helper constraints", () => {
             "Factory<Weapon>",
             (context: interfaces.Context) => {
                 return () => {
-                    return context.kernel.get<Weapon>("Katana");
+                    return context.container.get<Weapon>("Katana");
                 };
             },
             (b: interfaces.BindingWhenOnSyntax<interfaces.Factory<Weapon>>) => { b.whenTargetTagged("throwable", false); }
@@ -644,7 +644,7 @@ describe("Register helper constraints", () => {
             "Factory<Weapon>",
             (context: interfaces.Context) => {
                 return () => {
-                    return context.kernel.get<Weapon>("Shuriken");
+                    return context.container.get<Weapon>("Shuriken");
                 };
             },
             (b: interfaces.BindingWhenOnSyntax<interfaces.Factory<Weapon>>) => { b.whenTargetTagged("throwable", true); }
@@ -658,7 +658,7 @@ describe("Register helper constraints", () => {
             ]
         )(Ninja);
 
-        let ninja1 = kernel.get<Ninja>("Ninja");
+        let ninja1 = container.get<Ninja>("Ninja");
         expect(ninja1.katana.name).to.eql("Katana");
         expect(ninja1.shuriken.name).to.eql("Shuriken");
         expect(ninja1.getHealth()).to.eql(100);
@@ -716,9 +716,9 @@ describe("Register helper constraints", () => {
 
         }
 
-        let kernel = new Kernel();
-        let registerProvider = helpers.registerProvider(kernel);
-        let register = helpers.register(kernel);
+        let container = new Container();
+        let registerProvider = helpers.registerProvider(container);
+        let register = helpers.register(container);
 
         register<Katana>("Katana")(Katana);
         register<Shuriken>("Shuriken")(Shuriken);
@@ -728,7 +728,7 @@ describe("Register helper constraints", () => {
             (context) => {
                 return () => {
                     return new Promise<Weapon>((resolve) => {
-                        let katana = context.kernel.get<Weapon>("Katana");
+                        let katana = context.container.get<Weapon>("Katana");
                         resolve(katana);
                     });
                 };
@@ -741,7 +741,7 @@ describe("Register helper constraints", () => {
             (context) => {
                 return () => {
                     return new Promise<Weapon>((resolve) => {
-                        let katana = context.kernel.get<Weapon>("Shuriken");
+                        let katana = context.container.get<Weapon>("Shuriken");
                         resolve(katana);
                     });
                 };
@@ -757,7 +757,7 @@ describe("Register helper constraints", () => {
             ]
         )(Ninja);
 
-        let ninja1 = kernel.get<Ninja>("Ninja");
+        let ninja1 = container.get<Ninja>("Ninja");
         expect(ninja1.katana).to.eql(null);
         expect(ninja1.shuriken).to.eql(null);
         expect(ninja1.getHealth()).to.eql(100);
