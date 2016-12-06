@@ -419,8 +419,8 @@ describe("Register Helper", () => {
 
         class Ninja {
 
-            public katana: Katana;
-            public shuriken: Shuriken;
+            public katana: Katana | null;
+            public shuriken: Shuriken | null;
             public katanaProvider: KatanaProvider;
             public shurikenProvider: ShurikenProvider;
             private _health: number;

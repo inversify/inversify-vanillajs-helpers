@@ -691,8 +691,8 @@ describe("Register helper constraints", () => {
 
         class Ninja {
 
-            public katana: Weapon;
-            public shuriken: Weapon;
+            public katana: Weapon | null;
+            public shuriken: Weapon | null;
             public katanaProvider: WeaponProvider;
             public shurikenProvider: WeaponProvider;
             private _health: number;
@@ -735,7 +735,9 @@ describe("Register helper constraints", () => {
                     });
                 };
             },
-            (b: interfaces.BindingWhenOnSyntax<interfaces.Provider<Weapon>>) => { b.whenTargetTagged("throwable", false); }
+            (b: interfaces.BindingWhenOnSyntax<interfaces.Provider<Weapon>>) => {
+                b.whenTargetTagged("throwable", false);
+            }
         );
 
         registerProvider<WeaponProvider, Weapon>(

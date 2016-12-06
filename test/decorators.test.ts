@@ -62,6 +62,9 @@ describe("Register helper as a decorator", () => {
         }
 
         let ninja = container.get<Ninja>(TYPE.Warrior);
+        expect(ninja instanceof Ninja).to.eql(true);
+        expect(ninja.primaryWeapon instanceof Katana).to.eql(true);
+        expect(ninja.secondaryWeapon instanceof Shuriken).to.eql(true);
         expect(ninja.primaryWeapon.name).to.eql("Katana");
         expect(ninja.secondaryWeapon.name).to.eql("Shuriken");
 
