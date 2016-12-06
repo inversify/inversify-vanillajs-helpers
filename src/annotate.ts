@@ -62,4 +62,4 @@ function annotate<T>(
 
 }
 
-export default annotate;
+export { annotate };

@@ -1,4 +1,4 @@
-import annotate from "./annotate";
+import { annotate } from "./annotate";
 import * as interfaces from "./interfaces";
 import { interfaces as inversifyInterfaces } from "inversify";
 import {

@@ -414,17 +414,20 @@ describe("Register Helper", () => {
             }
         }
 
+        type KatanaProvider = () => Promise<Katana>;
+        type ShurikenProvider = () => Promise<Katana>;
+
         class Ninja {
 
-            public katana: Katana;
-            public shuriken: Shuriken;
-            public katanaProvider: interfaces.Provider<Katana>;
-            public shurikenProvider: interfaces.Provider<Shuriken>;
+            public katana: Katana | null;
+            public shuriken: Shuriken | null;
+            public katanaProvider: KatanaProvider;
+            public shurikenProvider: ShurikenProvider;
             private _health: number;
 
             public constructor(
-                katanaProvider: interfaces.Provider<Katana>,
-                shurikenProvider: interfaces.Provider<Shuriken>
+                katanaProvider: KatanaProvider,
+                shurikenProvider: ShurikenProvider
             ) {
                 this._health = 100;
                 this.katana = null;
@@ -449,7 +452,7 @@ describe("Register Helper", () => {
         register<Katana>("Katana")(Katana);
         register<Shuriken>("Shuriken")(Shuriken);
 
-        registerProvider<interfaces.Provider<Katana>, Katana>("Provider<Katana>", (context) => {
+        registerProvider<KatanaProvider, Katana>("Provider<Katana>", (context) => {
             return () => {
                 return new Promise<Katana>((resolve) => {
                     let katana = context.container.get<Katana>("Katana");
@@ -458,7 +461,7 @@ describe("Register Helper", () => {
             };
         });
 
-        registerProvider<interfaces.Provider<Shuriken>, Shuriken>("Provider<Shuriken>", (context) => {
+        registerProvider<ShurikenProvider, Shuriken>("Provider<Shuriken>", (context) => {
             return () => {
                 return new Promise<Shuriken>((resolve) => {
                     let katana = context.container.get<Shuriken>("Shuriken");

@@ -669,6 +669,8 @@ describe("Register helper constraints", () => {
 
     it("Should allow to apply constraints to registerProvider", () => {
 
+        type WeaponProvider = () => Promise<Weapon>;
+
         interface Weapon {
             name: string;
         }
@@ -689,15 +691,15 @@ describe("Register helper constraints", () => {
 
         class Ninja {
 
-            public katana: Weapon;
-            public shuriken: Weapon;
-            public katanaProvider: interfaces.Provider<Weapon>;
-            public shurikenProvider: interfaces.Provider<Weapon>;
+            public katana: Weapon | null;
+            public shuriken: Weapon | null;
+            public katanaProvider: WeaponProvider;
+            public shurikenProvider: WeaponProvider;
             private _health: number;
 
             public constructor(
-                katanaProvider: interfaces.Provider<Weapon>,
-                shurikenProvider: interfaces.Provider<Weapon>
+                katanaProvider: WeaponProvider,
+                shurikenProvider: WeaponProvider
             ) {
                 this._health = 100;
                 this.katana = null;
@@ -733,10 +735,12 @@ describe("Register helper constraints", () => {
                     });
                 };
             },
-            (b: interfaces.BindingWhenOnSyntax<interfaces.Provider<Weapon>>) => { b.whenTargetTagged("throwable", false); }
+            (b: interfaces.BindingWhenOnSyntax<interfaces.Provider<Weapon>>) => {
+                b.whenTargetTagged("throwable", false);
+            }
         );
 
-        registerProvider<interfaces.Provider<Shuriken>, Weapon>(
+        registerProvider<WeaponProvider, Weapon>(
             "Provider<Shuriken>",
             (context) => {
                 return () => {
@@ -746,7 +750,7 @@ describe("Register helper constraints", () => {
                     });
                 };
             },
-            (b: interfaces.BindingWhenOnSyntax<interfaces.Provider<Weapon>>) => { b.whenTargetTagged("throwable", true); }
+            (b: interfaces.BindingWhenOnSyntax<WeaponProvider>) => { b.whenTargetTagged("throwable", true); }
         );
 
         register<Ninja>(
