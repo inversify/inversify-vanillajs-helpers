@@ -1,6 +1,6 @@
 import { interfaces } from "inversify";
 import * as helperInterfaces from "./interfaces";
-import annotate from "./annotate";
+import { annotate } from "./annotate";
 
 function register(container: interfaces.Container) {
     return <T>(
