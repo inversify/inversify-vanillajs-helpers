@@ -726,7 +726,7 @@ describe("Register helper constraints", () => {
         register<Shuriken>("Shuriken")(Shuriken);
 
         registerProvider<interfaces.Provider<Weapon>, Weapon>(
-            "Provider<Weapon>",
+            "Provider<Katana>",
             (context) => {
                 return () => {
                     return new Promise<Weapon>((resolve) => {
@@ -750,14 +750,16 @@ describe("Register helper constraints", () => {
                     });
                 };
             },
-            (b: interfaces.BindingWhenOnSyntax<WeaponProvider>) => { b.whenTargetTagged("throwable", true); }
+            (b: interfaces.BindingWhenOnSyntax<WeaponProvider>) => {
+                b.whenTargetTagged("not-throwable", true);
+            }
         );
 
         register<Ninja>(
             "Ninja",
             [
-                { tagged: { key: "throwable", value: false }, type: "Provider<Weapon>" },
-                { tagged: { key: "throwable", value: true }, type: "Provider<Weapon>" }
+                { tagged: { key: "throwable", value: false }, type: "Provider<Katana>" },
+                { tagged: { key: "not-throwable", value: true }, type: "Provider<Shuriken>" }
             ]
         )(Ninja);
 
@@ -775,7 +777,7 @@ describe("Register helper constraints", () => {
 
         ninja1.shurikenProvider().then((shuriken: Shuriken) => {
             ninja1.shuriken = shuriken;
-            expect(ninja1.shuriken.name).to.eql("Katana");
+            expect(ninja1.shuriken.name).to.eql("Shuriken");
         });
 
     });

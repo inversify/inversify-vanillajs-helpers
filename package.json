@@ -1,6 +1,6 @@
 {
   "name": "inversify-vanillajs-helpers",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0",
   "description": "Some helper for the development of InversifyJS applications with VanillaJS",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
@@ -9,7 +9,7 @@
     "test": "test"
   },
   "dependencies": {
-    "inversify": "^3.0.0-rc.1"
+    "inversify": "^3.0.0"
   },
   "devDependencies": {
     "@types/chai": "^3.4.33",
@@ -24,8 +24,8 @@
     "publish-please": "^2.2.0",
     "reflect-metadata": "^0.1.8",
     "run-sequence": "^1.2.2",
-    "tslint": "^4.0.1",
-    "typescript": "^2.1.1"
+    "tslint": "^4.4.2",
+    "typescript": "^2.2.0"
   },
   "scripts": {
     "test": "gulp",
