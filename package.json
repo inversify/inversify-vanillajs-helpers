@@ -24,7 +24,7 @@
     "publish-please": "^2.2.0",
     "reflect-metadata": "^0.1.8",
     "run-sequence": "^1.2.2",
-    "tslint": "^4.4.2",
+    "tslint": "^5.0.0",
     "typescript": "^2.2.0"
   },
   "scripts": {
