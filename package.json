@@ -9,7 +9,7 @@
     "test": "test"
   },
   "dependencies": {
-    "inversify": "^3.0.0"
+    "inversify": "^3.3.0"
   },
   "devDependencies": {
     "@types/chai": "^3.4.33",
@@ -20,12 +20,13 @@
     "gulp-mocha": "^4.1.0",
     "gulp-tslint": "^7.0.0",
     "gulp-typescript": "^3.0.1",
+    "inversify-inject-decorators": "^3.0.1",
     "mocha": "^3.0.2",
     "publish-please": "^2.2.0",
     "reflect-metadata": "^0.1.8",
     "run-sequence": "^1.2.2",
     "tslint": "^5.0.0",
-    "typescript": "^2.2.0"
+    "typescript": "^2.2.2"
   },
   "scripts": {
     "test": "gulp",
