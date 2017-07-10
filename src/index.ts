@@ -3,27 +3,27 @@ import * as interfaces from "./interfaces";
 import { interfaces as inversifyInterfaces } from "inversify";
 import {
     register,
-    registerSelf,
-    registerConstantValue,
-    registerDynamicValue,
-    registerConstructor,
-    registerFunction,
     registerAutoFactory,
+    registerConstantValue,
+    registerConstructor,
+    registerDynamicValue,
     registerFactory,
-    registerProvider
+    registerFunction,
+    registerProvider,
+    registerSelf
 } from "./register";
 
 let helpers = {
     annotate,
     register,
-    registerSelf,
-    registerConstantValue,
-    registerDynamicValue,
-    registerConstructor,
-    registerFunction,
     registerAutoFactory,
+    registerConstantValue,
+    registerConstructor,
+    registerDynamicValue,
     registerFactory,
-    registerProvider
+    registerFunction,
+    registerProvider,
+    registerSelf
 };
 
 export { interfaces, inversifyInterfaces, helpers };
