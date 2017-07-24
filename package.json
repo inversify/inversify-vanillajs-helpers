@@ -9,7 +9,7 @@
     "test": "test"
   },
   "dependencies": {
-    "inversify": "4.2.0"
+    "inversify": "4.3.0"
   },
   "devDependencies": {
     "@types/chai": "4.0.1",
