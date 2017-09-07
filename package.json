@@ -12,21 +12,21 @@
     "inversify": "4.3.0"
   },
   "devDependencies": {
-    "@types/chai": "4.0.2",
-    "@types/mocha": "2.2.41",
-    "chai": "4.1.0",
+    "chai": "4.1.1",
+    "@types/mocha": "2.2.42",
+    "@types/chai": "4.0.3",
     "gulp": "3.9.1",
     "gulp-istanbul": "1.1.2",
     "gulp-mocha": "4.3.1",
     "gulp-tslint": "8.1.1",
-    "gulp-typescript": "3.2.1",
+    "gulp-typescript": "3.2.2",
     "inversify-inject-decorators": "3.0.1",
     "mocha": "3.5.0",
     "publish-please": "2.3.1",
     "reflect-metadata": "0.1.10",
     "run-sequence": "2.1.0",
-    "tslint": "5.6.0",
-    "typescript": "2.5.2"
+    "typescript": "2.5.2",
+    "tslint": "5.7.0",
   },
   "scripts": {
     "test": "gulp",
