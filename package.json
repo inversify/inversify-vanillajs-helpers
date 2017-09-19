@@ -24,7 +24,7 @@
     "mocha": "3.5.0",
     "publish-please": "2.3.1",
     "reflect-metadata": "0.1.10",
-    "run-sequence": "2.1.0",
+    "run-sequence": "2.2.0",
     "tslint": "5.7.0",
     "typescript": "2.4.2"
   },
