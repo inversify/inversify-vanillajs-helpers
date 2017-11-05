@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { Container, interfaces } from "inversify";
 import { helpers } from "../src/index";
+import { expectNoRejectedPromise } from "./test_utils";
 
 describe("Register Helper", () => {
 
@@ -398,7 +399,7 @@ describe("Register Helper", () => {
 
     });
 
-    it("Should allow to register a provider", () => {
+    it("Should allow to register a provider", (done) => {
 
         class Katana {
             public name: string;
@@ -482,12 +483,13 @@ describe("Register Helper", () => {
         ninja1.katanaProvider().then((katana: Katana) => {
             ninja1.katana = katana;
             expect(ninja1.katana.name).to.eql("Katana");
-        });
+        }).catch(expectNoRejectedPromise("Error in provider"));
 
         ninja1.shurikenProvider().then((shuriken: Shuriken) => {
             ninja1.shuriken = shuriken;
-            expect(ninja1.shuriken.name).to.eql("Katana");
-        });
+            expect(ninja1.shuriken.name).to.eql("Shuriken");
+            done();
+        }).catch(expectNoRejectedPromise("Error in provider"));
 
     });
 
