@@ -68,9 +68,9 @@ describe("Annotate Helper", () => {
             }
         }
 
-        let ThrowableWeaponId = Symbol("ThrowableWeapon");
-        let NotTrowableWeaponId = Symbol("NotTrowableWeapon");
-        let NinjaId = Symbol("Ninja");
+        let ThrowableWeaponId = Symbol.for("ThrowableWeapon");
+        let NotTrowableWeaponId = Symbol.for("NotTrowableWeapon");
+        let NinjaId = Symbol.for("Ninja");
 
         let container = new Container();
         helpers.annotate(Katana);
