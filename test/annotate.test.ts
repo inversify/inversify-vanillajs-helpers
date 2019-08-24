@@ -248,7 +248,7 @@ describe("Annotate Helper", () => {
             [
                 { tagged: { key: "throwable", value: false }, type: "Weapon" },
                 { tagged: { key: "throwable", value: true }, type: "Weapon" }
-            ]
+            ] as any
         );
         container.bind<Katana>("Weapon").to(Katana).whenTargetTagged("throwable", false);
         container.bind<Shuriken>("Weapon").to(Shuriken).whenTargetTagged("throwable", true);
