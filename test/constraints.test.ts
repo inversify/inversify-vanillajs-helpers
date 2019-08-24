@@ -125,7 +125,7 @@ describe("Register helper constraints", () => {
             [
                 { tagged: { key: "throwable", value: false }, type: TYPE.Weapon },
                 { tagged: { key: "throwable", value: true }, type: TYPE.Weapon }
-            ]
+            ] as any
         )(Ninja);
 
         let ninja = container.get<Ninja>(TYPE.Warrior);
@@ -318,7 +318,8 @@ describe("Register helper constraints", () => {
         register<Warrior>("Warrior", [
             { tagged: { key: "throwable", value: false }, type: "Weapon" },
             { tagged: { key: "throwable", value: true }, type: "Weapon" }
-        ])(Ninja);
+        ] as any
+        )(Ninja);
 
         let ninja = container.get<Warrior>("Warrior");
         expect(ninja.katana.name).to.eql("Katana");
@@ -490,7 +491,7 @@ describe("Register helper constraints", () => {
             [
                 { tagged: { key: "throwable", value: false }, type: "Weapon" },
                 { tagged: { key: "throwable", value: true }, type: "Weapon" }
-            ]
+            ] as any
         )(Ninja);
 
 
@@ -572,7 +573,7 @@ describe("Register helper constraints", () => {
             [
                 { tagged: { key: "throwable", value: false }, type: "Factory<Weapon>" },
                 { tagged: { key: "throwable", value: true }, type: "Factory<Weapon>" }
-            ]
+            ] as any
         )(Ninja);
 
         let ninja1 = container.get<Ninja>("Ninja");
@@ -655,7 +656,7 @@ describe("Register helper constraints", () => {
             [
                 { tagged: { key: "throwable", value: false }, type: "Factory<Weapon>" },
                 { tagged: { key: "throwable", value: true }, type: "Factory<Weapon>" }
-            ]
+            ] as any
         )(Ninja);
 
         let ninja1 = container.get<Ninja>("Ninja");
@@ -760,7 +761,7 @@ describe("Register helper constraints", () => {
             [
                 { tagged: { key: "throwable", value: false }, type: "Provider<Katana>" },
                 { tagged: { key: "not-throwable", value: true }, type: "Provider<Shuriken>" }
-            ]
+            ] as any
         )(Ninja);
 
         let ninja1 = container.get<Ninja>("Ninja");

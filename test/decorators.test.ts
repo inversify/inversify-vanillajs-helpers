@@ -50,7 +50,7 @@ describe("Register helper as a decorator", () => {
             [
                 { tagged: { key: "throwable", value: false }, type: TYPE.Weapon },
                 { tagged: { key: "throwable", value: true }, type: TYPE.Weapon }
-            ]
+            ] as any
         )
         class Ninja {
             public primaryWeapon: Weapon;
